@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Orelega+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap");
+@import "_variables";
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+.orelga {
+    font-family: $orelga;
+}
+
+.colorMain {
+    color: $color-main !important;
+}
+
+.navbar-brand {
+    font-size: 30px !important;
+}
+
+.btn-logout {
+    background: $color-main;
+    color: white;
+    border-radius: 30px;
+    padding: 7px 17px;;
+}
+
+.btn-logout:hover {
+    background: $color-main-darker;
+    border-radius: 30px;
+    color: white;
+    padding: 7px 17px;
+    transition: 0.9s;
+}
+
+.category-name {
+    background: $color-main;
+    padding: 1px 5px;
+    font-size: 12px;
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+}
+

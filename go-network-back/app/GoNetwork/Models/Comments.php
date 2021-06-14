@@ -1,14 +1,17 @@
 <?php
 
 namespace GoNetwork\Models;
+require_once __DIR__ . '/../../../bootstrap/init.php';
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
 
-class Commets {
+class Comments implements \JsonSerializable{
     
-    protected $id;
-    protected $post_id;
-    protected $owner_id;
-    protected $comment;
-    protected $created_at;
+    private $id;
+    private $post_id;
+    private $owner_id;
+    private $comment;
+    private $created_at;
 
     /**
      * Get the value of id
@@ -108,5 +111,38 @@ class Commets {
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'            => $this->getId(),
+            'post_id'       => $this->getPostId(),
+            'owner_id'      => $this->getOwnerId(),
+            'comment'       => $this->getComment(),
+            'created_at'    => $this->getCreatedAt(),
+        ];
+    }
+
+    public function getAllCommentsByPost($post_id) {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from comment
+                WHERE post_id = ?';
+
+        $stmt = $db->prepare($query);
+        $stmt->execute([$post_id]);
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $post = new self();
+            $post->setId($row['id']);
+            $post->setPostId($row['post_id']);
+            $post->setOwnerId($row['owner_id']);
+            $post->setComment($row['content']);
+            $post->setCreatedAt($row['created_at']);
+            $output[] = $post;
+        }
+        return $output;
     }
 }

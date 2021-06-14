@@ -1,19 +1,22 @@
 <?php
 
 namespace GoNetwork\Models;
+require_once __DIR__ . '/../../../bootstrap/init.php';
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
 
-class User {
+class User implements \JsonSerializable {
     
-    protected $id;
-    protected $name;
-    protected $last_name;
-    protected $email;
-    protected $password;
-    protected $gender_id;
-    protected $birth_date;
-    protected $country_id;
-    protected $profile_pic;
-    protected $created_at;
+    private $id;
+    private $name;
+    private $last_name;
+    private $email;
+    private $password;
+    private $gender_id;
+    private $birth_date;
+    private $country_id;
+    private $profile_pic;
+    private $created_at;
 
     /**
      * Get the value of id
@@ -214,4 +217,87 @@ class User {
 
         return $this;
     }
+
+    public function jsonSerialize() {
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'last_name'     => $this->getLastName(),
+            'email'         => $this->getEmail(),
+            'password'      => $this->getPassword(),
+            'gender_id'     => $this->getGenderId(),
+            'birth_date'    => $this->getBirthDate(),
+            'country_id'    => $this->getCountryId(),
+            'profile_pic'   => $this->getProfilePic(),
+            'created_at'    => $this->getCreatedAt()
+        ];
+    }
+
+    public function getUserById($id)
+    {
+        $db = DBConnection::getConnection();
+        $query = "SELECT * FROM user
+                    WHERE id = ?";
+
+        $stmt = $db->prepare($query);
+        if (!$stmt->execute([$id])) {
+            return null;
+        };
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $user = new self();
+        $user->setId($row['id']);
+        $user->setName($row['name']);
+        $user->setLastName($row['last_name']);
+        $user->setEmail($row['email']);
+        $user->setPassword($row['password']);
+        $user->setGenderId($row['gender_id']);
+        $user->setBirthDate($row['birth_date']);
+        $user->setCountryId($row['country_id']);
+        $user->setProfilePic($row['profile_pic']);
+        $user->setCreatedAt($row['created_at']);
+
+        return $user;
+    }
+
+
+    /**
+     * Traigo el objeto User si el email se encuentra en la DB
+     *
+     * @param $email
+     * @return User|null
+     */
+    public function userByEmail($email)
+    {
+        $db = DBConnection::getConnection();
+        $query = "SELECT * FROM user
+                    WHERE email = ?";
+        $stmt = $db->prepare($query);
+        if (!$stmt->execute([$email])) {
+            return null;
+        };
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $user = new self();
+            $user->setId($row['id']);
+            $user->setName($row['name']);
+            $user->setLastName($row['last_name']);
+            $user->setEmail($row['email']);
+            $user->setPassword($row['password']);
+            $user->setGenderId($row['gender_id']);
+            $user->setBirthDate($row['birth_date']);
+            $user->setCountryId($row['country_id']);
+            $user->setProfilePic($row['profile_pic']);
+            $user->setCreatedAt($row['created_at']);
+
+            $output = $user;
+        }
+        return $output;
+
+    }
+    
+
 }

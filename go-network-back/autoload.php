@@ -1,13 +1,12 @@
 <?php
 
-session_start();
+spl_autoload_register(function ($className) {
 
-spl_autoload_register(function($className) {
-    $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
+    $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
 
-    $filepath = __DIR__ . "/classes/" . $className . ".php";
+    $filepath = __DIR__ . '/app/' . $className . ".php";
 
-    if(file_exists($filepath)) {
-        require $filepath;
+    if (file_exists($filepath)) {
+        require_once $filepath;
     }
 });

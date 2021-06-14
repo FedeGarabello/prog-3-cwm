@@ -2,12 +2,6 @@
 
 namespace GoNetwork\Core;
 
-/**
- * Class App
- * @package DaVinci\Core
- *
- * Maneja el funcionamiento básico de la aplicación.
- */
 class App
 {
     private static $rootPath;
@@ -18,6 +12,9 @@ class App
 
     /** @var Request La petición del usuario. */
     protected $request;
+
+    /** @var EnvLoader */
+    protected static $loader;
 
     /**
      * App constructor.
@@ -33,6 +30,9 @@ class App
         self::$urlPath = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] .  $_SERVER['SCRIPT_NAME'];
 
         self::$urlPath = substr(self::$urlPath, 0, -9);
+
+        // Cargamos el loader.
+        $this->loadEnvData();
     }
 
     /**
@@ -49,8 +49,6 @@ class App
             $this->executeController($controller);
         } else {
             throw new \Exception("No existe la ruta especificada.");
-            // Opcionalmente, podemos directamente llamar a una página que muestre un error 404 o una página
-            // template que diga que el recurso no se encontró.
         }
     }
 
@@ -61,19 +59,12 @@ class App
      */
     public function executeController($controller)
     {
-        // $controller = "HomeController@index";
         $controllerData = explode('@', $controller);
         $controllerName = $controllerData[0];
         $controllerMethod = $controllerData[1];
 
-        // $controllerName = "HomeController";
-        // Le agregamos el namespace a la clase.
-        $controllerName = "\\DaVinci\\Controllers\\" . $controllerName;
-        // Esto nos deja, ej:
-        // \DaVinci\Controllers\HomeController
+        $controllerName = "\\GoNetwork\\Controllers\\" . $controllerName;
 
-        // Instanciamos el controller.
-        // Ej: new \DaVinci\Controllers\HomeController
         $controllerObject = new $controllerName;
 
         // Ejecutamos su método.
@@ -87,6 +78,11 @@ class App
      */
     public static function redirect($path = '')
     {
+        // Quitamos la barra de inicio de la ruta, de estar presente.
+        if(strpos($path, '/') === 0) {
+            $path = substr($path, 1);
+        }
+
         header('Location: ' . self::getUrlPath() . $path);
         exit;
     }
@@ -97,7 +93,7 @@ class App
      * @param string $path
      * @return string
      */
-    public static function urlTo($path)
+    public static function urlTo($path = '')
     {
         // Quitamos la barra de inicio de la ruta, de estar presente.
         if(strpos($path, '/') === 0) {
@@ -145,5 +141,24 @@ class App
     public static function getUrlPath()
     {
         return self::$urlPath;
+    }
+
+    /**
+     * Carga el archivo de entorno.
+     */
+    protected function loadEnvData() : void
+    {
+        self::$loader = new EnvLoader(self::$rootPath);
+    }
+
+    /**
+     * Retorna el valor del env.
+     *
+     * @param string $key
+     * @return string
+     */
+    public static function getEnv(string $key) : string
+    {
+       return self::$loader->getEnv($key);
     }
 }

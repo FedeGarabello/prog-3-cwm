@@ -2,17 +2,22 @@
 
 namespace GoNetwork\Models;
 
-class Categories {
+require_once __DIR__ . '/../../../bootstrap/init.php';
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
+
+
+class Categories implements \JsonSerializable {
     
-    protected $category_id;
-    protected $category_name;
+    protected $id;
+    protected $name;
 
     /**
      * Get the value of category_id
      */ 
-    public function getCategoryId()
+    public function getId()
     {
-        return $this->category_id;
+        return $this->id;
     }
 
     /**
@@ -20,9 +25,9 @@ class Categories {
      *
      * @return  self
      */ 
-    public function setCategoryId($category_id)
+    public function setId($id)
     {
-        $this->category_id = $category_id;
+        $this->id = $id;
 
         return $this;
     }
@@ -30,9 +35,9 @@ class Categories {
     /**
      * Get the value of category_name
      */ 
-    public function getCategoryName()
+    public function getName()
     {
-        return $this->category_name;
+        return $this->name;
     }
 
     /**
@@ -40,10 +45,39 @@ class Categories {
      *
      * @return  self
      */ 
-    public function setCategoryName($category_name)
+    public function setName($name)
     {
-        $this->category_name = $category_name;
+        $this->name = $name;
 
         return $this;
     }
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'   => $this->getId(),
+            'name' => $this->getName()
+        ];
+    }
+
+
+    public function getAllCategories() {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from category';
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $categories = new self();
+            $categories->setId($row['id']);
+            $categories->setName($row['name']);
+
+            $output[] = $categories;
+        }
+        return $output;
+    }
+
 } 

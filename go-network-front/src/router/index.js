@@ -1,5 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import ViewProfile from '../views/ViewProfile.vue'
+import NewPost from '../views/NewPost.vue'
+import Login from '../views/Login.vue'
+import authService from "../services/auth";
 
 const routes = [
   {
@@ -8,18 +12,41 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/profile',
+    name: 'ViewProfile',
+    component: ViewProfile,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/newPost',
+    name: 'NewPost',
+    component: NewPost,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
-})
+});
+
+router.beforeEach((to, from) => {
+  if(to.meta.requiresAuth && !authService.isAuthenticated()) {
+    return {
+      path: '/login'
+    };
+  }
+});
+
 
 export default router

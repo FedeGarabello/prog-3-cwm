@@ -1,12 +1,12 @@
 <?php
-namespace Auth;
-
-use GoNetwork\User\User;
-
+namespace GoNetwork\Auth;
+require_once __DIR__ . '/../../../bootstrap/init.php';
+use GoNetwork\Models\User;
+use GoNetwork\Auth\TokenService;
 class Auth
 {
     /**
-     * Realizamos la validacion del usuario buscandolo por el email
+     * Get the user by email.
      *
      * @param string $email
      * @param string $password
@@ -18,59 +18,54 @@ class Auth
         $user = $user->userByEmail($email);
 
         if($user) {
-            if(password_verify($password, $user['pass'])) {
-                $this->setAsAuthenticated($user['id_usuario']);
+            if(password_verify($password, $user->getPassword())) {
+                $this->setAsAuthenticated($user);
                 return true;
             }
         } 
         return false;
     }
 
-
-
     /**
-     * Marca el $user como autenticado.
-     *
+     * 
      * @param $user
      */
     public function setAsAuthenticated($user)
     {
-        $_SESSION['id'] = $user;
+        $tokenService = new TokenService();
+        $token = $tokenService->createToken($user->getId());
+
+        setcookie('token', $token, 0, "", "", false, true);
+
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'id'    => $user->getId(),
+                'email' => $user->getEmail()
+            ]
+        ]);
     }
 
     /**
-     * Desloguea al usuario.
+     * Logout User
      */
-    public function logout(): void
+    public function logout()
     {
-        unset($_SESSION['id']);
+        setcookie('token', null, time() - 3600 * 24);
+
+        echo json_encode([
+            'success' => true,
+        ]);
     }
 
     /**
-     * Retorna si el usuario está autenticado o no.
+     * 
      *
      * @return bool
      */
-    public function isAuthenticated(): bool
+    public function getToken()
     {
-        return isset($_SESSION['id']);
-    }
-
-
-
-    /**
-     * Retorna el usuario autenticado.
-     * Si no está autenticado, retorna null.
-     *
-     * @return Usuario|null
-     */
-    public function getUser()
-    {
-        if(!$this->isAuthenticated()) {
-            return null;
-        }
-
-        $usuario = new Usuario;
-        return $usuario->getUserById($_SESSION['id']);
+        $token = $_COOKIE['token'] ?? null;
+        return $token;
     }
 }
