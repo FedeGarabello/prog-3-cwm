@@ -2,18 +2,21 @@
 
 namespace GoNetwork\Models;
 
-class User {
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
+
+class User implements jsonSerialize {
     
-    protected $id;
-    protected $name;
-    protected $last_name;
-    protected $email;
-    protected $password;
-    protected $gender_id;
-    protected $birth_date;
-    protected $country_id;
-    protected $profile_pic;
-    protected $created_at;
+    private $id;
+    private $name;
+    private $last_name;
+    private $email;
+    private $password;
+    private $gender_id;
+    private $birth_date;
+    private $country_id;
+    private $profile_pic;
+    private $created_at;
 
     /**
      * Get the value of id
@@ -214,4 +217,40 @@ class User {
 
         return $this;
     }
+
+
+
+    public function userByEmail($email)
+    {
+        $db = DBConnection::getConnection();
+        $query = "SELECT * FROM user
+                    WHERE email = ?";
+        $stmt = $db->prepare($query);
+        $stmt->execute([$email]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
+
+    public function jsonSerialize() {
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'last_name'     => $this->getLastName(),
+            'email'         => $this->getEmail(),
+            'password'      => $this->getPassword(),
+            'gender_id'     => $this->getGenderId(),
+            'birth_date'    => $this->getBirthDate(),
+            'country_id'    => $this->getCountryId(),
+            'profile_pic'   => $this->getProfilePic(),
+            'created_at'    => $this->getCreatedAt()
+        ];
+    }
+
+
+
+
+
 }

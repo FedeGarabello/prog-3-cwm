@@ -1,6 +1,6 @@
 <?php
 
-namespace DBConnection;
+namespace GoNetwork\DBConnection;
 
 use Exception;
 use PDO;
@@ -12,7 +12,7 @@ class DBConnection
     const DB_HOST = "localhost";
     const DB_USER = "root";
     const DB_PASS = "";
-    const DB_BASE = "go";
+    const DB_BASE = "goNetwork";
 
     private function __construct()
     {}
@@ -32,7 +32,7 @@ class DBConnection
     }
 
     /**
-     * Returns the DB connection
+     * Returns the DBConnection connection
      * @return PDO
      */
     public static function getConnection()

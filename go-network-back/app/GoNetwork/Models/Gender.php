@@ -2,6 +2,10 @@
 
 namespace GoNetwork\Models;
 
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
+
+
 class Gender {
     
     protected $id;

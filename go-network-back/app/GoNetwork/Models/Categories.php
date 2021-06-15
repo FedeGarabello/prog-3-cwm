@@ -2,6 +2,10 @@
 
 namespace GoNetwork\Models;
 
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
+
+
 class Categories {
     
     protected $category_id;

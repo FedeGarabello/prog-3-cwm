@@ -2,13 +2,16 @@
 
 namespace GoNetwork\Models;
 
-class Commets {
+use GoNetwork\DBConnection\DBConnection;
+use PDO;
+
+class Comments {
     
-    protected $id;
-    protected $post_id;
-    protected $owner_id;
-    protected $comment;
-    protected $created_at;
+    private $id;
+    private $post_id;
+    private $owner_id;
+    private $comment;
+    private $created_at;
 
     /**
      * Get the value of id
