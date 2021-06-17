@@ -219,16 +219,39 @@ class User implements jsonSerialize {
     }
 
 
-
+    /**
+     * Traigo el objeto User si el email se encuentra en la DB
+     *
+     * @param $email
+     * @return User|null
+     */
     public function userByEmail($email)
     {
         $db = DBConnection::getConnection();
         $query = "SELECT * FROM user
                     WHERE email = ?";
         $stmt = $db->prepare($query);
-        $stmt->execute([$email]);
+        if (!$stmt->execute([$email])) {
+            //throw new \Exception('No existe un usuario con el email cargado');
+            return null;
+        };
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $user = new self();
+        $user->setId($fila['id']);
+        $user->setName($fila['name']);
+        $user->setLastName($fila['last_name']);
+        $user->setEmail($fila['email']);
+        $user->setPassword($fila['password']);
+        $user->setGenderId($fila['gender_id']);
+        $user->setBirthDate($fila['birth_date']);
+        $user->setCountryId($fila['country_id']);
+        $user->setProfilePic($fila['profile_pic']);
+        $user->setCreatedAt($fila['created_at']);
+
+        return $user;
+
     }
 
 

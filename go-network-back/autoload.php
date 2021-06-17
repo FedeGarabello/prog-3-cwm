@@ -2,12 +2,17 @@
 
 session_start();
 
-spl_autoload_register(function($className) {
-    $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
+spl_autoload_register(function ($className) {
+    // Cambiamos las \ a /
+    $className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
 
-    $filepath = __DIR__ . "/classes/" . $className . ".php";
+    // Le agregamos la extensión de php, y la carpeta de
+    // base "app/".
+    $filepath = __DIR__ . '/app/' . $className . ".php";
 
-    if(file_exists($filepath)) {
-        require $filepath;
+    // Verificamos si existe, y en caso positivo,
+    // incluimos la clase.
+    if (file_exists($filepath)) {
+        require_once $filepath;
     }
 });

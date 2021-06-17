@@ -8,14 +8,14 @@ use PDO;
 
 class Posts {
 
-    protected $id;
-    protected $title;
-    protected $content;
-    protected $post_pic;
-    protected $owner_id;
-    protected $likes;
-    protected $category_id;
-    protected $created_at;
+    private $id;
+    private $title;
+    private $content;
+    private $post_pic;
+    private $owner_id;
+    private $likes;
+    private $category_id;
+    private $created_at;
 
     /**
      * Get the value of id
@@ -175,5 +175,58 @@ class Posts {
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+
+    public function getAllPosts() {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * FROM post;';
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+
+        $salida = [];
+
+        while($fila = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+            $post = new self();
+            $post->setId($fila['id']);
+            $post->setTitle($fila['title']);
+            $post->setContent($fila['content']);
+            $post->setPostPic($fila['post_pic']);
+            $post->setOwnerId($fila['owner_id']);
+            $post->setLikes($fila['likes']);
+            $post->setCategoryId($fila['category_id']);
+            $post->setCreatedAt($fila['created_at']);
+
+            $salida[] = $post;
+        }
+        return $salida;
+    }
+
+
+    public function getAllPostByUser($owner_id) {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from post
+                    WHERE owner_id = ?';
+        $stmt = $db->prepare($query);
+        $stmt->execute([$owner_id]);
+
+        $salida = [];
+
+        while($fila = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+            $post = new self();
+            $post->setId($fila['id']);
+            $post->setTitle($fila['title']);
+            $post->setContent($fila['content']);
+            $post->setPostPic($fila['post_pic']);
+            $post->setOwnerId($fila['owner_id']);
+            $post->setLikes($fila['likes']);
+            $post->setCategoryId($fila['category_id']);
+            $post->setCreatedAt($fila['created_at']);
+
+            $salida[] = $post;
+        }
+        return $salida;
     }
 }
