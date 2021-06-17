@@ -5,7 +5,7 @@ namespace GoNetwork\Models;
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 
-class User implements jsonSerialize {
+class User implements \JsonSerializable {
     
     private $id;
     private $name;
@@ -236,19 +236,19 @@ class User implements jsonSerialize {
             return null;
         };
 
-        $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $user = new self();
-        $user->setId($fila['id']);
-        $user->setName($fila['name']);
-        $user->setLastName($fila['last_name']);
-        $user->setEmail($fila['email']);
-        $user->setPassword($fila['password']);
-        $user->setGenderId($fila['gender_id']);
-        $user->setBirthDate($fila['birth_date']);
-        $user->setCountryId($fila['country_id']);
-        $user->setProfilePic($fila['profile_pic']);
-        $user->setCreatedAt($fila['created_at']);
+        $user->setId($row['id']);
+        $user->setName($row['name']);
+        $user->setLastName($row['last_name']);
+        $user->setEmail($row['email']);
+        $user->setPassword($row['password']);
+        $user->setGenderId($row['gender_id']);
+        $user->setBirthDate($row['birth_date']);
+        $user->setCountryId($row['country_id']);
+        $user->setProfilePic($row['profile_pic']);
+        $user->setCreatedAt($row['created_at']);
 
         return $user;
 
@@ -271,9 +271,4 @@ class User implements jsonSerialize {
             'created_at'    => $this->getCreatedAt()
         ];
     }
-
-
-
-
-
 }

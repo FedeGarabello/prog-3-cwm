@@ -199,23 +199,23 @@ class Posts implements \JsonSerializable {
         $stmt = $db->prepare($query);
         $stmt->execute();
 
-        $salida = [];
+        $output = [];
 
-        while($fila = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
             $post = new self();
-            $post->setId($fila['id']);
-            $post->setTitle($fila['title']);
-            $post->setContent($fila['content']);
-            $post->setPostPic($fila['post_pic']);
-            $post->setOwnerId($fila['owner_id']);
-            $post->setLikes($fila['likes']);
-            $post->setCategoryId($fila['category_id']);
-            $post->setCreatedAt($fila['created_at']);
+            $post->setId($row['id']);
+            $post->setTitle($row['title']);
+            $post->setContent($row['content']);
+            $post->setPostPic($row['post_pic']);
+            $post->setOwnerId($row['owner_id']);
+            $post->setLikes($row['likes']);
+            $post->setCategoryId($row['category_id']);
+            $post->setCreatedAt($row['created_at']);
 
-            $salida[] = $post;
+            $output[] = $post;
         }
-        return $salida;
+        return $output;
     }
 
 
@@ -226,22 +226,22 @@ class Posts implements \JsonSerializable {
         $stmt = $db->prepare($query);
         $stmt->execute([$owner_id]);
 
-        $salida = [];
+        $output = [];
 
-        while($fila = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
             $post = new self();
-            $post->setId($fila['id']);
-            $post->setTitle($fila['title']);
-            $post->setContent($fila['content']);
-            $post->setPostPic($fila['post_pic']);
-            $post->setOwnerId($fila['owner_id']);
-            $post->setLikes($fila['likes']);
-            $post->setCategoryId($fila['category_id']);
-            $post->setCreatedAt($fila['created_at']);
+            $post->setId($row['id']);
+            $post->setTitle($row['title']);
+            $post->setContent($row['content']);
+            $post->setPostPic($row['post_pic']);
+            $post->setOwnerId($row['owner_id']);
+            $post->setLikes($row['likes']);
+            $post->setCategoryId($row['category_id']);
+            $post->setCreatedAt($row['created_at']);
 
-            $salida[] = $post;
+            $output[] = $post;
         }
-        return $salida;
+        return $output;
     }
 }
