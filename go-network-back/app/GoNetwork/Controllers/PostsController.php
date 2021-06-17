@@ -13,7 +13,6 @@ class PostsController
     public function listAll() {
         $posts = (new Posts())->getAllPosts();
 
-        // Muestro la salida como Json
         View::renderJson($posts);
     }
 }

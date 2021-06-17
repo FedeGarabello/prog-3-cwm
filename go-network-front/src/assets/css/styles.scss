@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Orelega+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap");
+@import "_variables";
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+.orelga {
+    font-family: $orelga;
+}
+
+.colorMain {
+    color: $color-main !important;
+}
+
+.navbar-brand {
+    font-size: 30px !important;
+}
