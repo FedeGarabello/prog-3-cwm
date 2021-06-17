@@ -6,7 +6,7 @@ use GoNetwork\DBConnection\DBConnection;
 use PDO;
 
 
-class Posts {
+class Posts implements \JsonSerializable {
 
     private $id;
     private $title;
@@ -175,6 +175,21 @@ class Posts {
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'            => $this->getId(),
+            'title'         => $this->getTitle(),
+            'content'       => $this->getContent(),
+            'post_pic'      => $this->getPostPic(),
+            'owner_id'      => $this->getOwnerId(),
+            'likes'         => $this->getLikes(),
+            'category_id'   => $this->getCategoryId(),
+            'created_At'    => $this->getCreatedAt(),
+        ];
     }
 
 
