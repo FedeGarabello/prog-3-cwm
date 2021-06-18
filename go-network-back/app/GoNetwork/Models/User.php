@@ -1,7 +1,7 @@
 <?php
 
 namespace GoNetwork\Models;
-
+require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 

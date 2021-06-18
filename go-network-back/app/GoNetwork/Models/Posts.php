@@ -1,25 +1,9 @@
 <?php
 
 namespace GoNetwork\Models;
-
+require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
-
-header("Access-Control-Allow-Origin: http://localhost:8080");
-header("Access-Control-Allow-Credentials");
-
-header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS");
-// 3. Access-Control-Allow-Headers
-header("Access-Control-Allow-Headers: Content-Type");
-// 4. Access-Control-Allow-Credentials
-//      Indica si permitimos que las peticiones usen "credenciales" (permitan el uso de cookies).
-header("Access-Control-Allow-Credentials: true");
-
-
-// Para asegurarnos de que cualquier sistema que reciba la respuesta sepa que es un JSON, vamos a
-// agregar el header correspondiente.
-header("Content-Type: application/json");
-
 class Posts implements \JsonSerializable {
 
     private $id;
