@@ -9,6 +9,6 @@
 use GoNetwork\Core\Route;
 
 // Registramos la primer ruta! :D
-Route::add('GET', '/', 'HomeController@index');
+//Route::add('GET', '/', 'HomeController@index');
 
 Route::add('GET','/posts','PostsController@listAll');
