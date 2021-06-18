@@ -175,6 +175,10 @@ class Posts implements \JsonSerializable {
         return $this;
     }
 
+    public function getUserByOwerId() {
+        $user = new User;
+        return $user->getUserById($this->getOwnerId());
+    }
 
     public function jsonSerialize()
     {
@@ -184,6 +188,7 @@ class Posts implements \JsonSerializable {
             'content'       => $this->getContent(),
             'post_pic'      => $this->getPostPic(),
             'owner_id'      => $this->getOwnerId(),
+            'user_name'     => $this->getUserByOwerId()->getName(),
             'likes'         => $this->getLikes(),
             'category_id'   => $this->getCategoryId(),
             'created_At'    => $this->getCreatedAt(),

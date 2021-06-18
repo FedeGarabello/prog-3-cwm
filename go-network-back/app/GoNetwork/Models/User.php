@@ -218,6 +218,34 @@ class User implements \JsonSerializable {
         return $this;
     }
 
+    public function getUserById($id)
+    {
+        $db = DBConnection::getConnection();
+        $query = "SELECT * FROM user
+                    WHERE id = ?";
+        $stmt = $db->prepare($query);
+        if (!$stmt->execute([$id])) {
+            //throw new \Exception('No existe un usuario con el email cargado');
+            return null;
+        };
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $user = new self();
+        $user->setId($row['id']);
+        $user->setName($row['name']);
+        $user->setLastName($row['last_name']);
+        $user->setEmail($row['email']);
+        $user->setPassword($row['password']);
+        $user->setGenderId($row['gender_id']);
+        $user->setBirthDate($row['birth_date']);
+        $user->setCountryId($row['country_id']);
+        $user->setProfilePic($row['profile_pic']);
+        $user->setCreatedAt($row['created_at']);
+
+        return $user;
+    }
+
 
     /**
      * Traigo el objeto User si el email se encuentra en la DB
