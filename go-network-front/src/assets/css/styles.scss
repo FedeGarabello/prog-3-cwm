@@ -17,3 +17,18 @@
 .navbar-brand {
     font-size: 30px !important;
 }
+
+.btn-logout {
+    background: $color-main;
+    color: white;
+    border-radius: 30px;
+    padding: 10px 25px;
+}
+
+.btn-logout:hover {
+    background: $color-main-darker;
+    border-radius: 30px;
+    color: white;
+    padding: 10px 25px;
+    transition: 0.9s;
+}

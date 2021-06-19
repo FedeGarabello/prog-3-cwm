@@ -12,7 +12,6 @@ class PostsController
 {
     public function listAll() {
         $posts = (new Posts())->getAllPosts();
-
         View::renderJson($posts);
     }
 }

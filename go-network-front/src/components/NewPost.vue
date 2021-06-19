@@ -31,7 +31,4 @@
   line-height: 50px;
   font-size: 30px;
 }
-
-
-
 </style>
