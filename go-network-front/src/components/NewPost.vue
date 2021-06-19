@@ -11,12 +11,11 @@
 #z_button {
   background-color: #3386AF;
   height: 50px;
-  position: absolute;
+  position: fixed;
   bottom: 2rem;
   right: 2rem;
   outline: 0;
   display: block;
-  margin: 250px 0px 0px 20px;
   color: #fff;
   border-radius: 100%;
   width: 50px;

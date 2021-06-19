@@ -15,6 +15,7 @@ class Posts implements \JsonSerializable {
     private $category_id;
     private $created_at;
 
+
     /**
      * Get the value of id
      */ 
@@ -190,7 +191,7 @@ class Posts implements \JsonSerializable {
             'owner_id'      => $this->getOwnerId(),
             'user_name'     => trim($this->getUserByOwerId()->getName()),
             'last_name'     => trim($this->getUserByOwerId()->getLastName()),
-            'profile_pic'     => trim($this->getUserByOwerId()->getProfilePic()),
+            'profile_pic'   => $this->getUserByOwerId()->getProfilePic(),
             'likes'         => $this->getLikes(),
             'category_id'   => $this->getCategoryId(),
             'created_At'    => $this->getCreatedAt(),

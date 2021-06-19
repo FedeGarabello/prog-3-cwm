@@ -3,7 +3,7 @@
       <!-- Aca la card -->
       <div class="container"
            v-for="post in posts"
-           :key="posts.id"
+           :key="post.id"
       >
       <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
@@ -30,17 +30,16 @@
 
         <div class="blog-body">
           <div class="blog-title">
-            <h1><a href="#">I Like To Make Cool Things</a></h1>
+            <h2>{{ post.title }}</h2>
           </div>
           <div class="blog-summary">
-            <p>I love working on fresh designs that <a href="https://www.youtube.com/watch?v=hANtM1vJvOo">breathe</a>. To that end, I need to freshen up my portfolio here because it does exactly the opposite. For the next month I will be working almost exclusively on my portfolio. Sounds like a lot of fun!</p>
+            <p>{{ post.content }}</p>
           </div>
           <div class="blog-tags">
             <ul>
-              <li><a href="#">css</a></li>
-              <li><a href="#">web design</a></li>
-              <li><a href="#">codepen</a></li>
-              <li><a href="https://twitter.com/russbeye">twitter</a></li>
+              <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="{{ post.category_id }}">
+                {{ post.category_id }}
+              </button>
             </ul>
           </div>
         </div>
@@ -100,7 +99,7 @@ export default {
 .blog-container {
 background: #fff;
 border-radius: 5px;
-box-shadow: hsla(0, 0, 0, .2) 0 4px 2px -2px;
+box-shadow: hsla(0,0,0,.2) 0 4px 2px -2px;
 font-family: "adelle-sans", sans-serif;
 font-weight: 100;
 margin: 5vh auto;
