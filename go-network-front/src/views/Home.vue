@@ -45,11 +45,7 @@
           </div>
           <div class="blog-summary">
             <p>
-              I love working on fresh designs that
-              <a href="https://www.youtube.com/watch?v=hANtM1vJvOo">breathe</a>.
-              To that end, I need to freshen up my portfolio here because it
-              does exactly the opposite. For the next month I will be working
-              almost exclusively on my portfolio. Sounds like a lot of fun!
+              {{ post.content }}
             </p>
           </div>
           <div class="blog-tags">
@@ -63,20 +59,9 @@
 
         <div class="blog-footer">
           <ul>
-            <li class="published-date">2 days ago</li>
-            <li class="comments">
-              <a href="#"
-                ><svg class="icon-bubble">
-                  <use xlink:href="#icon-bubble"></use></svg
-                ><span class="numero">4</span></a
-              >
-            </li>
-            <li class="shares">
-              <a href="#"
-                ><svg class="icon-star"><use xlink:href="#icon-star"></use></svg
-                ><span class="numero">1</span></a
-              >
-            </li>
+            <li class="published-date">{{ post.created_At }}</li>
+            <li class="comments"><a href="#"><svg class="icon-bubble"><use xlink:href="#icon-bubble"></use></svg><span class="numero">4</span></a></li>
+            <li class="shares"><a href="#"><svg class="icon-star"><use xlink:href="#icon-star"></use></svg><span class="numero">1</span></a></li>
           </ul>
         </div>
       </div>
@@ -123,6 +108,7 @@ export default {
   font-weight: 100;
   margin: 5vh auto;
   width: 50vw;
+  box-shadow: 24px 24px 49px #d9d9d9, -24px -24px 49px #ffffff;
 }
 
 .blog-container a {
