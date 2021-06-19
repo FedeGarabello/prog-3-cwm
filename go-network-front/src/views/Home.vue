@@ -1,11 +1,4 @@
 <template>
-<<<<<<< Updated upstream
-    <main class="container">
-      <!-- Aca la card -->
-      <div class="container"
-           v-for="post in posts"
-           :key="post.id"
-=======
   <main class="container">
     <!-- Aca la card -->
     <div class="container" 
@@ -16,7 +9,6 @@
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
->>>>>>> Stashed changes
       >
         <defs>
           <symbol id="icon-bubble" viewBox="0 0 1024 1024">
@@ -52,9 +44,6 @@
             <h2>{{ post.title }}</h2>
           </div>
           <div class="blog-summary">
-<<<<<<< Updated upstream
-            <p>{{ post.content }}</p>
-=======
             <p>
               I love working on fresh designs that
               <a href="https://www.youtube.com/watch?v=hANtM1vJvOo">breathe</a>.
@@ -62,12 +51,11 @@
               does exactly the opposite. For the next month I will be working
               almost exclusively on my portfolio. Sounds like a lot of fun!
             </p>
->>>>>>> Stashed changes
           </div>
           <div class="blog-tags">
             <ul>
               <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="{{ post.category_id }}">
-                {{ post.category_id }}
+                {{ post.category_id.name}}
               </button>
             </ul>
           </div>

@@ -4,6 +4,8 @@ namespace GoNetwork\Models;
 require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
+use stdClass;
+
 class Posts implements \JsonSerializable {
 
     private $id;
@@ -202,13 +204,19 @@ class Posts implements \JsonSerializable {
 
     public function getAllPosts() {
         $db = DBConnection::getConnection();
-        $query = 'SELECT * FROM post ;';
+        $query = 'SELECT 
+                p.*, c.name as name FROM post p
+                INNER JOIN category c on p.category_id = c.id;';
         $stmt = $db->prepare($query);
         $stmt->execute();
+
+        $categories = new stdClass();
 
         $output = [];
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $categories->id = $row['category_id'];
+            $categories->name = $row['name'];
 
             $post = new self();
             $post->setId($row['id']);
@@ -217,7 +225,7 @@ class Posts implements \JsonSerializable {
             $post->setPostPic($row['post_pic']);
             $post->setOwnerId($row['owner_id']);
             $post->setLikes($row['likes']);
-            $post->setCategoryId($row['category_id']);
+            $post->setCategoryId($categories);
             $post->setCreatedAt($row['created_at']);
 
             $output[] = $post;
