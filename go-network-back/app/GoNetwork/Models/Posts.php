@@ -188,17 +188,20 @@ class Posts implements \JsonSerializable {
             'content'       => $this->getContent(),
             'post_pic'      => $this->getPostPic(),
             'owner_id'      => $this->getOwnerId(),
-            'user_name'     => $this->getUserByOwerId()->getName(),
+            'user_name'     => trim($this->getUserByOwerId()->getName()),
+            'last_name'     => trim($this->getUserByOwerId()->getLastName()),
+            'profile_pic'     => trim($this->getUserByOwerId()->getProfilePic()),
             'likes'         => $this->getLikes(),
             'category_id'   => $this->getCategoryId(),
             'created_At'    => $this->getCreatedAt(),
+
         ];
     }
 
 
     public function getAllPosts() {
         $db = DBConnection::getConnection();
-        $query = 'SELECT * FROM post;';
+        $query = 'SELECT * FROM post ;';
         $stmt = $db->prepare($query);
         $stmt->execute();
 
