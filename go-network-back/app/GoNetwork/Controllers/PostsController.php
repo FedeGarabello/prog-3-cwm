@@ -20,8 +20,10 @@ class PostsController
      * @param $data
      * @return boolean
      */
-    public function newPost($data) {
-        $post = (new Posts())->createPost($data);
+    public function newPost() {
+        /*
+        $post = (new Posts())->createPost();
         View::renderJson($post);
+        */
     }
 }

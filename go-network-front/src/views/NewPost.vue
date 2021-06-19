@@ -2,7 +2,7 @@
   <div class="container w-75 mt-5">
     <h2>Alta nuevo Post</h2>
     <form
-        @submit.prevent="createPost"
+        @submit.prevent=""
         action="#">
       <div class="form-group">
         <label for="title">Título</label>
