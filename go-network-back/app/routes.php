@@ -12,3 +12,4 @@ use GoNetwork\Core\Route;
 //Route::add('GET', '/', 'HomeController@index');
 
 Route::add('GET','/posts','PostsController@listAll');
+Route::add('POST','/newPost','PostsController@newPost');

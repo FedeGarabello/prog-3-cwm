@@ -69,20 +69,20 @@
 
     <!-- FIN de CARD -->
 
-    <NewPost />
+    <NewPostBtn />
   </main>
 </template>
 
 <script>
 
 
-import NewPost from "@/components/NewPost.vue";
+import NewPostBtn from "@/components/NewPostBtn.vue";
 import { apiFetch } from "@/api/fetch";
 
 export default {
   name: "Home",
   components: {
-    NewPost,
+    NewPostBtn,
   },
   data: function () {
     return {

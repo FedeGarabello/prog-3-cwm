@@ -14,4 +14,14 @@ class PostsController
         $posts = (new Posts())->getAllPosts();
         View::renderJson($posts);
     }
+
+    /**
+     * Recibe un objeto POST para insertar
+     * @param $data
+     * @return boolean
+     */
+    public function newPost($data) {
+        $post = (new Posts())->createPost($data);
+        View::renderJson($post);
+    }
 }

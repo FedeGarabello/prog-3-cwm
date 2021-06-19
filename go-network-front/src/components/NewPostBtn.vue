@@ -1,8 +1,10 @@
 <template>
     <div id="container">
-    <div id="z_button" tabindex="0">
-        <div id="z_plus">+</div>
-    </div>
+      <router-link to="/newPost">
+        <div id="z_button" tabindex="0">
+            <div id="z_plus">+</div>
+        </div>
+      </router-link>
     </div>
 </template>
 

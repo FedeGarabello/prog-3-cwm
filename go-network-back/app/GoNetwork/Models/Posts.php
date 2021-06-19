@@ -259,4 +259,14 @@ class Posts implements \JsonSerializable {
         }
         return $output;
     }
+
+    public function createPost($data) {
+
+        $db = DBConnection::getConnection();
+        $query = 'INSERT INTO post (`title`, `content`, `owner_id`, `likes`, `category_id`) 
+                    VALUES ('asd', 'asdasda', '1', '51', '1')';
+        $stmt = $db->prepare($query);
+        $stmt->execute([$owner_id]);
+
+    }
 }
