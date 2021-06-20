@@ -197,7 +197,6 @@ class Posts implements \JsonSerializable {
             'likes'         => $this->getLikes(),
             'category_id'   => $this->getCategoryId(),
             'created_At'    => $this->getCreatedAt(),
-
         ];
     }
 
@@ -209,12 +208,11 @@ class Posts implements \JsonSerializable {
                 INNER JOIN category c on p.category_id = c.id;';
         $stmt = $db->prepare($query);
         $stmt->execute();
-
-        $categories = new stdClass();
-
+        
         $output = [];
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $categories = new stdClass();
             $categories->id = $row['category_id'];
             $categories->name = $row['name'];
 

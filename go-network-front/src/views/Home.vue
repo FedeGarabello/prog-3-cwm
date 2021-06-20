@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        <div class="blog-body">
+        <div class="blog-body mt-3">
           <div class="blog-title">
             <h2>{{ post.title }}</h2>
           </div>
@@ -60,22 +60,38 @@
         <div class="blog-footer">
           <ul>
             <li class="published-date">{{ post.created_At }}</li>
-            <li class="comments"><a href="#"><svg class="icon-bubble"><use xlink:href="#icon-bubble"></use></svg><span class="numero">4</span></a></li>
+            <li class="comments" id="headingOne">
+                  <a href="#" 
+                  data-toggle="collapse" 
+                  data-target="#collapseOne" 
+                  aria-expanded="true" 
+                  aria-controls="collapseOne"
+                  @click="loadComments(post.id)"><svg class="icon-bubble"><use xlink:href="#icon-bubble">
+                    </use></svg><span class="numero">4</span>
+                  </a>
+            </li>
             <li class="shares"><a href="#"><svg class="icon-star"><use xlink:href="#icon-star"></use></svg><span class="numero">1</span></a></li>
           </ul>
         </div>
-      </div>
+
+
+        <div class="accordion" id="accordionExample" 
+        v-for="comment in comments" :key="comment.id">
+            <input type="hidden" name="" value="{{comment.id}}">
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    {{comment.comment}}
+                </div>
+              </div>
+            </div>
+        </div>
+
     </div>
-
-    <!-- FIN de CARD -->
-
     <NewPostBtn />
   </main>
 </template>
 
 <script>
-
-
 import NewPostBtn from "@/components/NewPostBtn.vue";
 import { apiFetch } from "@/api/fetch";
 
@@ -87,17 +103,37 @@ export default {
   data: function () {
     return {
       posts: [],
+      comments: [],
     };
   },
-  mounted() {
-    apiFetch("posts").then((res) => {
-      console.log(res);
-      this.posts = res;
-    });
+
+  methods: {
+    loadPosts() {
+      apiFetch("posts")
+      .then((res) => {
+        this.posts = res;
+      });
+    },
+
+    loadComments(id) {
+      apiFetch('comments/' + id)
+        .then((res) => {
+          console.log(res)
+          this.comments = res;
+        })
+    },
+
+    getAllComments() {
+      return this.comments
+    }
   },
+
+  mounted() {
+    this.loadPosts()
+    console.log(this.comments)
+  }
 };
 </script>
-
 
 <style>
 .blog-container {

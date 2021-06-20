@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 
-class Comments {
+class Comments implements \JsonSerializable{
     
     private $id;
     private $post_id;
@@ -111,5 +111,38 @@ class Comments {
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'=> $this->getId(),
+            'post_id'=> $this->getPostId(),
+            'owner_id'=> $this->getOwnerId(),
+            'comment'=> $this->getComment(),
+            'created_at'=> $this->getCreatedAt(),
+        ];
+    }
+
+    public function getAllCommentsByPost($post_id) {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from comment
+                WHERE post_id = ?';
+
+        $stmt = $db->prepare($query);
+        $stmt->execute([$post_id]);
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $post = new self();
+            $post->setId($row['id']);
+            $post->setPostId($row['post_id']);
+            $post->setOwnerId($row['owner_id']);
+            $post->setComment($row['content']);
+            $post->setCreatedAt($row['created_at']);
+            $output[] = $post;
+        }
+        return $output;
     }
 }
