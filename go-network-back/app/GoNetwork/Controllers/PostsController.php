@@ -17,12 +17,14 @@ class PostsController
 
     /**
      * Recibe un objeto POST para insertar
-     * @param $data
      * @return boolean
      */
     public function createNewPost() {
+        $inputData = file_get_contents('php://input');
+        $postData = json_decode($inputData, true);
 
-        $post = (new Posts())->createPost();
+
+        $post = (new Posts())->createPost($postData);
         View::renderJson($post);
 
     }

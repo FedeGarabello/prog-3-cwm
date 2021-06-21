@@ -1,13 +1,8 @@
 <?php
 
 namespace GoNetwork\Models;
+
 require_once __DIR__ . '/../../../bootstrap/init.php';
-
-
-/*
-$inputData = file_get_contents('php://input');
-$postData = json_decode($inputData, true);
-*/
 
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
@@ -265,18 +260,29 @@ class Posts implements \JsonSerializable {
         return $output;
     }
 
-    public function createPost() {
+    public function createPost($data) {
+//        return $data;
 
         $db = DBConnection::getConnection();
-        $query = 'INSERT INTO post (`title`, `content`, `owner_id`, `likes`, `category_id`)
-                    VALUES ('prueba', 'pruaba', '1', '51', '1')';
+        $query = 'INSERT INTO post (title, content, owner_id, likes, category_id)
+                    VALUES (:title, :content, 1, 0, :category_id)';
         $stmt = $db->prepare($query);
-        $stmt->execute([]);
 
-        if(!$stmt->fetch(PDO::FETCH_ASSOC)){
-            return false;
-        }
-        return true;
+        if(!$stmt->execute([
+            "title" => $data['title'],
+            "content" => $data['content'],
+            "category_id" => $data['category_id']
+        ])){
+            return [
+                'success' => false,
+                'msg' => 'Error al crear el Post'
+            ];
+        };
 
+        return [
+            'success' => true,
+            'msg' => 'Post creado con éxito'
+        ];
     }
+
 }

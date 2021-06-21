@@ -35,7 +35,7 @@
 
 
 <script>
-//import {apiFetch} from "@/api/fetch";
+import {apiFetch} from "@/api/fetch";
 
 export default {
   name: "NewPost",
@@ -53,18 +53,14 @@ export default {
   },
   methods: {
     createPostVUE(){
-      console.log(this.post)
-      // apiFetch("newPost",{
-      //   mode: 'no-cors',
-      //   method: 'POST',
-      //   body: JSON.stringify(this.post),
-      //   headers: {
-      //     'Content-Type' : 'application/json'
-      //   }
-      // })
-      //     .then(res => {
-      //       console.log(res);
-      //     });
+      // console.log(this.post)
+      apiFetch("newPost",{
+        method: 'POST',
+        body: JSON.stringify(this.post)
+      })
+          .then(res => {
+            console.log(res);
+          });
     }
   }
 }
