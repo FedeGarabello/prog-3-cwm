@@ -2,6 +2,13 @@
 
 namespace GoNetwork\Models;
 require_once __DIR__ . '/../../../bootstrap/init.php';
+
+
+/*
+$inputData = file_get_contents('php://input');
+$postData = json_decode($inputData, true);
+*/
+
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 use stdClass;
@@ -205,7 +212,7 @@ class Posts implements \JsonSerializable {
         $db = DBConnection::getConnection();
         $query = 'SELECT 
                 p.*, c.name as name FROM post p
-                INNER JOIN category c on p.category_id = c.id;';
+                INNER JOIN category c on p.category_id = c.id';
         $stmt = $db->prepare($query);
         $stmt->execute();
         
@@ -261,10 +268,15 @@ class Posts implements \JsonSerializable {
     public function createPost() {
 
         $db = DBConnection::getConnection();
-        /*$query = 'INSERT INTO post (`title`, `content`, `owner_id`, `likes`, `category_id`)
-                    VALUES ('asd', 'asdasda', '1', '51', '1')';
+        $query = 'INSERT INTO post (`title`, `content`, `owner_id`, `likes`, `category_id`)
+                    VALUES ('prueba', 'pruaba', '1', '51', '1')';
         $stmt = $db->prepare($query);
         $stmt->execute([]);
-        */
+
+        if(!$stmt->fetch(PDO::FETCH_ASSOC)){
+            return false;
+        }
+        return true;
+
     }
 }

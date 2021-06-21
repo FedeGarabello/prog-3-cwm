@@ -2,7 +2,7 @@
   <div class="container w-75 mt-5">
     <h2>Alta nuevo Post</h2>
     <form
-        @submit.prevent=""
+        @submit.prevent="createPostVUE"
         action="#">
       <div class="form-group">
         <label for="title">Título</label>
@@ -35,7 +35,7 @@
 
 
 <script>
-import {apiFetch} from "@/api/fetch";
+//import {apiFetch} from "@/api/fetch";
 
 export default {
   name: "NewPost",
@@ -52,19 +52,19 @@ export default {
     };
   },
   methods: {
-    createPost(){
-      //console.log(this.post)
-      apiFetch('newPost',{
-        method: 'POST',
-        body: JSON.stringify(this.post),
-        headers: {
-          'Content-Type' : 'application/json'
-        }
-      })
-      .then(response => {
-        console.log(response);
-      });
-
+    createPostVUE(){
+      console.log(this.post)
+      // apiFetch("newPost",{
+      //   mode: 'no-cors',
+      //   method: 'POST',
+      //   body: JSON.stringify(this.post),
+      //   headers: {
+      //     'Content-Type' : 'application/json'
+      //   }
+      // })
+      //     .then(res => {
+      //       console.log(res);
+      //     });
     }
   }
 }
