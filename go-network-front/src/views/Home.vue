@@ -50,9 +50,9 @@
           </div>
           <div class="blog-tags">
             <ul>
-              <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="{{ post.category_id }}">
+              <p class="category-name">
                 {{ post.category_id.name}}
-              </button>
+              </p>
             </ul>
           </div>
         </div>
@@ -63,9 +63,9 @@
             <li class="comments" id="headingOne">
                   <a href="#" 
                   data-toggle="collapse" 
-                  data-target="#collapseOne" 
+                  :data-target="`#collapseOne${post.id}`"
                   aria-expanded="true" 
-                  aria-controls="collapseOne"
+                  :aria-controls="`collapseOne${post.id}`"
                   @click="loadComments(post.id)"><svg class="icon-bubble"><use xlink:href="#icon-bubble">
                     </use></svg><span class="numero">4</span>
                   </a>
@@ -74,11 +74,10 @@
           </ul>
         </div>
 
-
         <div class="accordion" id="accordionExample" 
         v-for="comment in comments" :key="comment.id">
             <input type="hidden" name="" value="{{comment.id}}">
-              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div :id="`collapseOne${post.id}`" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                 <div class="card-body">
                     {{comment.comment}}
                 </div>
@@ -116,7 +115,7 @@ export default {
     },
 
     loadComments(id) {
-      apiFetch('comments/' + id)
+      apiFetch(`comments/${id}`)
         .then((res) => {
           console.log(res)
           this.comments = res;
@@ -130,8 +129,8 @@ export default {
 
   mounted() {
     this.loadPosts()
-    console.log(this.comments)
   }
+
 };
 </script>
 
