@@ -5,6 +5,7 @@ namespace GoNetwork\Controllers;
 use GoNetwork\Core\App;
 use GoNetwork\Core\Route;
 use GoNetwork\Core\View;
+use GoNetwork\Models\Categories;
 use GoNetwork\Models\Posts;
 
 
@@ -23,9 +24,12 @@ class PostsController
         $inputData = file_get_contents('php://input');
         $postData = json_decode($inputData, true);
 
-
         $post = (new Posts())->createPost($postData);
         View::renderJson($post);
+    }
 
+    public function getCategories() {
+        $categories = (new Categories())->getAllCategories();
+        View::renderJson($categories);
     }
 }

@@ -13,4 +13,5 @@ use GoNetwork\Core\Route;
 
 Route::add('GET','/posts','PostsController@listAll');
 Route::add('POST','/newPost','PostsController@createNewPost');
+Route::add('GET','/categories','PostsController@getCategories');
 Route::add('GET','/comments/{id}','CommentsController@getCommentsByPost');

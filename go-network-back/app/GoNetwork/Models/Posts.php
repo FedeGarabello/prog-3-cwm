@@ -261,8 +261,6 @@ class Posts implements \JsonSerializable {
     }
 
     public function createPost($data) {
-//        return $data;
-
         $db = DBConnection::getConnection();
         $query = 'INSERT INTO post (title, content, owner_id, likes, category_id)
                     VALUES (:title, :content, 1, 0, :category_id)';

@@ -5,6 +5,7 @@
       <span class="icon-line line-long"></span>
       <div class="icon-circle"></div>
       <div class="icon-fix"></div>
+      <p class="checkMsg">{{msg}}</p>
     </div>
   </div>
 </template>
@@ -12,11 +13,19 @@
 <script>
 export default {
   name: 'CheckSuccess',
+  props: ['msg']
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.checkMsg {
+  top: 100px;
+  position: absolute;
+  width: 50vw;
+  text-align: center;
+  left: 50%;
+  margin-left: -25vw;
+}
 .success-checkmark {
 
     
