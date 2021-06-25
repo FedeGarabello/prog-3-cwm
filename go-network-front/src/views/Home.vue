@@ -66,11 +66,15 @@
                   :data-target="`#collapseOne${post.id}`"
                   aria-expanded="true" 
                   :aria-controls="`collapseOne${post.id}`"
-                  @click="loadComments(post.id)"><svg class="icon-bubble"><use xlink:href="#icon-bubble">
-                    </use></svg><span class="numero">4</span>
+                  @click="loadComments(post.id)">
+                    <i class="far fa-2x fa-comments colorMain"></i>
                   </a>
             </li>
-            <li class="shares"><a href="#"><svg class="icon-star"><use xlink:href="#icon-star"></use></svg><span class="numero">1</span></a></li>
+            <li class="shares">
+                <a href="#">
+                  <i class="far fa-2x fa-heart colorMain"></i>
+                </a>
+              </li>
           </ul>
         </div>
 
