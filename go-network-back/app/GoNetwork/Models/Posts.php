@@ -203,11 +203,16 @@ class Posts implements \JsonSerializable {
     }
 
 
+    /**
+     * Traigo todos los post de la base de datos
+     * @return Array con objetos Post
+     */
     public function getAllPosts() {
         $db = DBConnection::getConnection();
         $query = 'SELECT 
                 p.*, c.name as name FROM post p
-                INNER JOIN category c on p.category_id = c.id';
+                INNER JOIN category c on p.category_id = c.id
+                order by created_at desc';
         $stmt = $db->prepare($query);
         $stmt->execute();
         
@@ -234,6 +239,11 @@ class Posts implements \JsonSerializable {
     }
 
 
+    /**
+     * Traigo todos los Post del usuario que está logueado
+     * @param $owner_id
+     * @return array
+     */
     public function getAllPostByUser($owner_id) {
         $db = DBConnection::getConnection();
         $query = 'SELECT * from post
@@ -260,16 +270,23 @@ class Posts implements \JsonSerializable {
         return $output;
     }
 
+    /**
+     * Creo un nuevo post que recibe un Json data que el mismo contiene title, content, owner_id, post_pic y category_id
+     * @param $data
+     * @return array
+     */
     public function createPost($data) {
+
         $db = DBConnection::getConnection();
-        $query = 'INSERT INTO post (title, content, owner_id, likes, category_id)
-                    VALUES (:title, :content, 1, 0, :category_id)';
+        $query = 'INSERT INTO post (title, content, owner_id, likes, category_id, post_pic)
+                    VALUES (:title, :content, 1, 0, :category_id, :post_pic)';
         $stmt = $db->prepare($query);
 
         if(!$stmt->execute([
             "title" => $data['title'],
             "content" => $data['content'],
-            "category_id" => $data['category_id']
+            "category_id" => $data['category_id'],
+            "post_pic" => $data['post_pic']
         ])){
             return [
                 'success' => false,

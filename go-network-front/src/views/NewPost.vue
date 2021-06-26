@@ -28,7 +28,7 @@
         <select class="form-control" id="category" v-model="post.category_id" :aria-describedby="errors.category_id !== null ? 'errors-category_id' : null">
           <option
               v-for="category in categories"
-              value="category.id"
+              :value="category.id"
               :key="category.id"
           >{{ category.name }}</option>
         </select>
@@ -104,6 +104,7 @@ export default {
   methods: {
     loadPic(){
       console.log(this.$refs.post_pic);
+      this.$refs.post_pic.files = null;
       const reader = new FileReader();
       reader.addEventListener('load',()=>{
         this.post.post_pic = reader.result;
@@ -114,6 +115,10 @@ export default {
       // Si no pasa la validación, no realizamos la petición.
       if(!this.validates()) return;
 
+      /**
+       * Verifico si hay cargada una imagen
+       */
+
       apiFetch("newPost",{
         method: 'POST',
         body: JSON.stringify(this.post)
@@ -121,7 +126,6 @@ export default {
           .then(res => {
             console.log(res);
             if(res.success) {
-              // console.log(res.msg);
 
               this.notification.type = res.success;
               this.notification.msg = res.msg;
@@ -131,13 +135,18 @@ export default {
                 category_id: null,
                 post_pic: null,
               };
-
               // Direcciono a la lista de los POST
+              setTimeout(() => {
+                this.$router.push('/')
+              }, 3000 )
               // this.$router.push('/')
             }
 
           });
     },
+    /**
+     * Valido los campos del form
+     */
     validates() {
       let hasErrors = false;
 
@@ -165,12 +174,16 @@ export default {
 
       return !hasErrors;
     }
+
   },
   mounted() {
+    /**
+     * Traigo las categorias para el formulario de alta.
+     */
     apiFetch("categories")
         .then(data => {
           this.categories = data;
-          console.log(this.categories);
+          //console.log(this.categories);
         })
 
   }

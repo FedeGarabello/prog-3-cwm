@@ -24,6 +24,14 @@ class PostsController
         $inputData = file_get_contents('php://input');
         $postData = json_decode($inputData, true);
 
+        if($postData['post_pic'] != null || $postData['post_pic'] != '') {
+            $imagenParts = explode(',', $postData['post_pic']);
+            $imagenDecoded = base64_decode($imagenParts[1]);
+            $imagenNombre =  time(). ".jpg";
+            file_put_contents( "./../imgs/" . $imagenNombre, $imagenDecoded);
+            $postData['post_pic'] = $imagenNombre;
+        }
+
         $post = (new Posts())->createPost($postData);
         View::renderJson($post);
     }
