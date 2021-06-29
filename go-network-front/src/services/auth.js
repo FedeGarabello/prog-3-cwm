@@ -55,7 +55,6 @@ const authService = {
         return apiFetch('logout', {
             method: 'POST',
         }).then(res => {
-            console.log(res)
             userData = {
                 id: null,
                 email: null,

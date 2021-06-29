@@ -55,6 +55,7 @@ export default {
         },
         logout() {
             authService.logout();
+            this.$router.push('/login')
             this.auth.user = {
                 id: null,
                 email: null,

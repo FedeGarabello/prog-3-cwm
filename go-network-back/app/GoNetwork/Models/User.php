@@ -298,6 +298,48 @@ class User implements \JsonSerializable {
         return $output;
 
     }
+
+    public function createUser($data) {
+
+        if ($data['profile_pic'] === null) {
+            $data['profile_pic'] = "profile_pic.jpg";
+        }
+
+        $db = DBConnection::getConnection();
+
+        $query = 'INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`, `country_id`, `profile_pic`, `created_at`) VALUES 
+                  (:name, :last_name, :email, :password, 1, :birth_date, 1, :profile_pic, :created_at)';
+
+        $stmt = $db->prepare($query);
+
+        if(!$stmt->execute([
+            "name"          => $data['name'],
+            "last_name"     => $data['last_name'],
+            "email"         => $data['email'],
+            "password"      => $this->generatePassword($data['password']),
+            "gender_id"     => $data['gender_id'],
+            "birth_date"    => $data['birth_date'],
+            "country_id"    => $data['country_id'],
+            "profile_pic"   => $data['profile_pic'],
+            "created_at"    => $data['created_at'],
+
+        ])){
+            return [
+                'success' => false,
+                'msg' => 'Error al crear al usuario'
+            ];
+        };
+
+        return [
+            'success' => true,
+            'msg' => 'El usuario fue creado con exito'
+        ];
+    }
+
+    public function generatePassword($password){
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        return $passwordHash;
+    }
     
 
 }
