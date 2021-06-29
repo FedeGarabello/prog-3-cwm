@@ -84,6 +84,7 @@ export default {
                     this.loading = false;
                     if(response.success) {
                         this.$emit('logged', response.data);
+                        this.$router.push('/')
                     }
                 });
         }
