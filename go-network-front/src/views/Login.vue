@@ -42,6 +42,7 @@
                         >
                   </div>
                   <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Login">
+                  <router-link class="btn btn-block login-btn mb-4" to="/register">Registrarse</router-link>
                 </form>
                 <a href="#!" class="forgot-password-link">Olvidaste tu contraseña?</a>
                 <p class="login-card-footer-text colorMain">Si no tenes credenciales comunicate con el  <a href="#!" class="text-reset">Administrador</a></p>
@@ -86,6 +87,9 @@ export default {
                         this.$emit('logged', response.data);
                     }
                 });
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1000 );
         }
     }
 };

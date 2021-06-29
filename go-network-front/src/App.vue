@@ -58,7 +58,8 @@ export default {
             this.auth.user = {
                 id: null,
                 email: null,
-            }
+            },
+            this.$router.push('/login');
         }
     },
     mounted() {

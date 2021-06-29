@@ -128,6 +128,7 @@ export default {
       apiFetch(`comments/${id}`)
         .then((res) => {
           this.comments = res;
+          console.log(res);
         })
     },
 
