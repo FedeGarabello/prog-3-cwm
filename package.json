@@ -1,0 +1,7 @@
+{
+  "name": "prog-3-cwm",
+  "version": "1.0.0",
+  "dependencies": {
+    "vue-avatar-cropper": "^2.0.0"
+  }
+}

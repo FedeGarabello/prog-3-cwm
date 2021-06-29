@@ -3,6 +3,8 @@
     <p class="login-card-description">Bienvenido, bro.</p>
     <p class="login-card-subtitle">Creá tu usuario y comenzá a disfrutar esta red social de Snowboarders!</p>
 
+
+
     <form action="#"
           @submit.prevent="register">
       <div class="form-group">
@@ -87,15 +89,19 @@
       <input name="newUser" id="newUser" class="btn btn-block login-btn mb-4" type="submit" value="Registrarse">
 
     </form>
+
+    <PicProfile></PicProfile>
   </div>
 </template>
 
 
 <script>
 import { apiFetch } from "@/api/fetch";
+import PicProfile from "@/components/ProfilePic";
 
 export default {
   name: 'Register',
+  components: { PicProfile },
   data() {
     return {
       user: {

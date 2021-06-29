@@ -301,14 +301,10 @@ class User implements \JsonSerializable {
 
     public function createUser($data) {
 
-        if ($data['profile_pic'] === null) {
-            $data['profile_pic'] = "profile_pic.jpg";
-        }
-
         $db = DBConnection::getConnection();
 
-        $query = 'INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`, `country_id`, `profile_pic`, `created_at`) VALUES 
-                  (:name, :last_name, :email, :password, 1, :birth_date, 1, :profile_pic, :created_at)';
+        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`, `country_id`, `profile_pic`) 
+                VALUES (:name, :last_name, :email, :password, :gender_id, :birth_date, :country_id, :profile_pic)";
 
         $stmt = $db->prepare($query);
 
@@ -316,13 +312,11 @@ class User implements \JsonSerializable {
             "name"          => $data['name'],
             "last_name"     => $data['last_name'],
             "email"         => $data['email'],
-            "password"      => $this->generatePassword($data['password']),
+            "password"      => $data['password'],
             "gender_id"     => $data['gender_id'],
-            "birth_date"    => $data['birth_date'],
+            "birth_date"    => '1986-09-20',
             "country_id"    => $data['country_id'],
-            "profile_pic"   => $data['profile_pic'],
-            "created_at"    => $data['created_at'],
-
+            "profile_pic"   => "profile.jpg"
         ])){
             return [
                 'success' => false,
