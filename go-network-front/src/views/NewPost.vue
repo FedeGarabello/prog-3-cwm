@@ -148,7 +148,7 @@ export default {
               // this.$router.push('/')
             }
 
-          });
+      });
     },
     /**
      * Valido los campos del form

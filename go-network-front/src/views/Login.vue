@@ -88,9 +88,6 @@ export default {
                         this.$router.push('/')
                     }
                 });
-                setTimeout(() => {
-                  this.$router.push('/')
-                }, 1000 );
         }
     }
 };

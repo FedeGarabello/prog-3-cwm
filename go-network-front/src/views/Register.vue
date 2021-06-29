@@ -3,7 +3,8 @@
     <p class="login-card-description">Bienvenido, bro.</p>
     <p class="login-card-subtitle">Creá tu usuario y comenzá a disfrutar esta red social de Snowboarders!</p>
 
-    <form action="#">
+    <form action="#"
+          @submit.prevent="register">
       <div class="form-group">
         <label for="name" class="sr-only">Nombre</label>
         <input
@@ -11,6 +12,7 @@
             name="name"
             id="name"
             class="form-control"
+            v-model="user.name"
             placeholder="Ingresá tu Nombre"
         >
       </div>
@@ -21,6 +23,7 @@
             name="last_name"
             id="last_name"
             class="form-control"
+            v-model="user.last_name"
             placeholder="Ingresá tu Apellido"
         >
       </div>
@@ -31,6 +34,7 @@
             name="email"
             id="email"
             class="form-control"
+            v-model="user.email"
             placeholder="Ingresá tu Email"
         >
       </div>
@@ -41,6 +45,7 @@
             name="password"
             id="password"
             class="form-control"
+            v-model="user.password"
             placeholder="***********"
         >
       </div>
@@ -52,6 +57,7 @@
             name="gender_id"
             id="gender_id"
             class="form-control"
+            v-model="user.gender_id"
             placeholder="Ingresá tu Género"
         >
       </div>
@@ -62,6 +68,7 @@
             name="country_id"
             id="country_id"
             class="form-control"
+            v-model="user.country_id"
             placeholder="Ingresá tu País"
         >
       </div>
@@ -72,6 +79,7 @@
             name="profile_pic"
             id="profile_pic"
             class="form-control"
+            @change="loadProfilePic"
             placeholder="Ingresá tu Imágen de Perfil"
         >
       </div>
@@ -81,3 +89,68 @@
     </form>
   </div>
 </template>
+
+
+<script>
+import { apiFetch } from "@/api/fetch";
+
+export default {
+  name: 'Register',
+  data() {
+    return {
+      user: {
+        name: null,
+        last_name: null,
+        email: null,
+        password: null,
+        gender_id: null,
+        birth_date: null,
+        country_id: null,
+        profile_pic: null
+      },
+      loading: false,
+      notification: {
+        msg: null,
+        type: 'success',
+      },
+    };
+  },
+  methods: {
+    loadProfilePic() {
+      // TODO Cargar imagen
+    },
+    register() {
+      this.loading = true;
+
+      apiFetch("register",{
+        method: 'POST',
+        body: JSON.stringify(this.user)
+      })
+        .then(res => {
+          console.log(res);
+          if(res.success) {
+
+            this.notification.type = res.success;
+            this.notification.msg = res.msg;
+            this.user = {
+              name: null,
+              last_name: null,
+              email: null,
+              password: null,
+              gender_id: null,
+              birth_date: null,
+              country_id: null,
+              profile_pic: null
+            };
+
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 3000 );
+          }
+
+        });
+    }
+  }
+};
+
+</script>

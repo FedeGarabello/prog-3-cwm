@@ -181,7 +181,7 @@ export default {
   background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/17779/yosemite-3.jpg");
   background-size: cover;
   border-radius: 5px 5px 0 0;
-  height: 15rem;
+  height: 500px;
   box-shadow: inset hsla(0, 0, 0, 0.2) 0 64px 64px 16px;
 }
 
