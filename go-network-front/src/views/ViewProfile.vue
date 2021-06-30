@@ -1,6 +1,7 @@
 <template>
-    <main class="container mt-5">
-        <div>
+    <main class="container mt-5 text-center">
+        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" width="200" alt="">
+        <div class="mt-5">
             <p>Nombre: {{userData.name}}</p>
             <p>Apellido: {{userData.last_name}}</p>
             <p>Miembro desde: {{userData.created_at}}</p>

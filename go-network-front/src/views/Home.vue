@@ -36,16 +36,14 @@
         <div class="blog-footer">
           <ul>
             <li class="published-date">{{ post.created_At }}</li>
-            <li class="comments" id="headingOne">
-                  <a href="#" 
-                  data-toggle="collapse" 
-                  :data-target="`#collapseOne${post.id}`"
-                  aria-expanded="true" 
-                  :aria-controls="`collapseOne${post.id}`"
+
+            <li class="comments accordion" id="accordionExample">
+                  <a href="#" data-toggle="collapse" :data-target="`#collapseOne${post.id}`" aria-expanded="true" aria-controls="collapseOne"
                   @click="loadComments(post.id)">
-                    <i class="far fa-2x fa-comments colorMain"></i>
+                    <i class="far fa-2x fa-comments colorMain" id="headingOne"></i>
                   </a>
             </li>
+
             <li class="shares">
                   <i 
                     class='far fa-2x fa-heart colorMain'
@@ -54,10 +52,11 @@
             </li>
 
             <li class="edit">
+              <router-link :to="`home/${post.id}`">
                   <i 
                     class='far fa-2x fa-edit ml-3 colorMain'
-                    @click="fillHeart"
                   ></i>
+              </router-link>
             </li>
 
             <li class="delete"
@@ -72,12 +71,12 @@
 
         </div>
 
-        <div class="accordion" id="accordionExample" 
-        v-for="comment in comments" :key="comment.id">
-            <input type="hidden" name="" value="{{comment.id}}">
+        <!-- Comentarios -->
+        <div class="accordion" id="accordionExample">
               <div :id="`collapseOne${post.id}`" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-                    {{comment.comment}}
+                <div class="card-body"
+                  v-for="comment in comments" :key="comment.id">
+                    <p class="colorMain">{{comment.comment}}</p>
                 </div>
               </div>
             </div>
@@ -137,7 +136,6 @@ export default {
       apiFetch(`comments/${id}`)
         .then((res) => {
           this.comments = res;
-          console.log(res);
         })
     },
 
@@ -159,6 +157,7 @@ export default {
       this.auth.user = authService.getUserData();
     }
 
+    this.loadComments()
     this.loadPosts()
   }
 

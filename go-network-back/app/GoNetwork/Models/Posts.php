@@ -271,6 +271,37 @@ class Posts implements \JsonSerializable {
         return $output;
     }
 
+        /**
+     * Bring all the post by the user given.
+     * @param $owner_id
+     * @return array
+     */
+    public function getPostById($id) {
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from post
+                    WHERE id = ?';
+        $stmt = $db->prepare($query);
+        $stmt->execute([$id]);
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+            $post = new self();
+            $post->setId($row['id']);
+            $post->setTitle($row['title']);
+            $post->setContent($row['content']);
+            $post->setPostPic($row['post_pic']);
+            $post->setOwnerId($row['owner_id']);
+            $post->setLikes($row['likes']);
+            $post->setCategoryId($row['category_id']);
+            $post->setCreatedAt($row['created_at']);
+
+            $output[] = $post;
+        }
+        return $output;
+    }
+
     /**
      * Create a new post with the provided data - title, content, owner_id, post_pic & category_id -
      * @param $data

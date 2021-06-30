@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import ViewProfile from '../views/ViewProfile.vue'
 import NewPost from '../views/NewPost.vue'
 import Login from '../views/Login.vue'
+import PostDetail from '../views/PostDetail.vue'
 import Register from '../views/Register.vue'
 import authService from "../services/auth";
 
@@ -38,6 +39,12 @@ const routes = [
     name: 'register',
     component: Register
   },
+  {
+    path: '/:id',
+    name: 'PostDetail',
+    component: PostDetail
+  },
+
 ]
 
 const router = createRouter({

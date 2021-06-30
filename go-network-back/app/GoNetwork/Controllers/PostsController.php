@@ -16,6 +16,12 @@ class PostsController
         View::renderJson($posts);
     }
 
+    public function getPostById() {
+        $id = Route::getUrlParameters()['id'];
+        $posts = (new Posts())->getPostById($id);
+        View::renderJson($posts);
+    }
+    
     /**
      * Recibe un objeto POST para insertar
      * @return boolean
@@ -47,4 +53,5 @@ class PostsController
         $posts = (new Posts())->deletePost($id);
         View::renderJson($posts);
     }
+
 }
