@@ -8,11 +8,11 @@
 
       <div class="blog-container">
         <div class="blog-header">
-          <div class="blog-cover" :style="`background:url(${imageURL(post.post_pic)}); background-size: cover;`">
-            <div class="blog-author">
-              <h3>{{ post.user_name }} {{ post.last_name }}</h3>
+            <div class="blog-cover" :style="`background:url(${imageURL(post.post_pic)}); background-size: cover;`">
+              <div class="blog-author">
+                <h3>{{ post.user_name }} {{ post.last_name }}</h3>
+              </div>
             </div>
-          </div>
         </div>
 
         <div class="blog-body mt-3">
@@ -53,15 +53,23 @@
                   ></i>
             </li>
 
+            <li class="edit">
+                  <i 
+                    class='far fa-2x fa-edit ml-3 colorMain'
+                    @click="fillHeart"
+                  ></i>
+            </li>
+
             <li class="delete"
             v-if="post.owner_id == auth.user.id">
                   <i 
-                    class='far fa-2x fa-trash-alt colorMain ml-3'
+                    class='far fa-2x fa-trash-alt colorDanger ml-3'
                     @click="deletePost(post.id)"
                   ></i>
             </li>
 
           </ul>
+
         </div>
 
         <div class="accordion" id="accordionExample" 
@@ -77,6 +85,7 @@
 
     </div>
     <NewPostBtn />
+    
   </main>
 </template>
 
@@ -90,7 +99,7 @@ import authService from "../services/auth.js";
 export default {
   name: "Home",
   components: {
-    NewPostBtn,
+    NewPostBtn, 
   },
   data: function () {
     return {
