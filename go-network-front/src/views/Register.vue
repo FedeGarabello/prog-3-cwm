@@ -135,7 +135,6 @@ export default {
         body: JSON.stringify(this.user)
       })
         .then(res => {
-          console.log(res);
           if(res.success) {
 
             this.notification.type = res.success;

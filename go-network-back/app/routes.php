@@ -5,6 +5,7 @@ use GoNetwork\Core\Route;
 Route::add('GET','/posts','PostsController@listAll');
 Route::add('POST','/newPost','PostsController@createNewPost');
 Route::add('GET','/getPostById/{id}','PostsController@getPostById');
+Route::add('GET','/postByUser/{id}','PostsController@getPostByOwner');
 Route::add('GET','/deletePost/{id}','PostsController@deletePost');
 Route::add('POST','/editPost','PostsController@editPostById');
 

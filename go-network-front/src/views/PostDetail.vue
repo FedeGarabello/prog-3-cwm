@@ -191,7 +191,6 @@ export default {
   mounted() {
     apiFetch('getPostById/' + this.$route.params.id)
         .then(postData => {
-          //console.log(postData);
           this.post = postData;
           this.validateOwner(this.post.owner_id);
         });

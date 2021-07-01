@@ -239,7 +239,7 @@ class Posts implements \JsonSerializable {
 
             $output[] = $post;
         }
-        sleep(1.2);
+        time_nanosleep(0, 300000000);
         return $output;
     }
 

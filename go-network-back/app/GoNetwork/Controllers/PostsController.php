@@ -62,4 +62,12 @@ class PostsController
         View::renderJson($posts);
     }
 
+
+    public function getPostByOwner() {
+        
+        $id = Route::getUrlParameters()['id'];
+        $posts = (new Posts())->getAllPostByUser($id);
+        View::renderJson($posts);
+    }
+
 }

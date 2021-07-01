@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="container w-75 mt-5">
-      <h2>Alta nuevo Post</h2>
+      <h2 class="mainGrey font-weight-bold">Alta nuevo Post</h2>
       <form
           v-if="!notification.type"
           @submit.prevent="createPostVUE"
@@ -191,7 +191,6 @@ export default {
     apiFetch("categories")
         .then(data => {
           this.categories = data;
-          //console.log(this.categories);
         });
     }
 }
