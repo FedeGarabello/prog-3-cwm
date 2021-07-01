@@ -46,16 +46,17 @@
                   </a>
             </li>
 
-            <li class="edit">
+            <li class="edit"
+                v-if="post.owner_id == auth.user.id">
               <router-link :to="`home/${post.id}`">
                   <i 
-                    class='far fa-2x fa-edit ml-3 colorMain'
+                    class='far fa-2x fa-edit colorMain'
                   ></i>
               </router-link>
             </li>
 
             <li class="delete"
-            v-if="post.owner_id == auth.user.id">
+              v-if="post.owner_id == auth.user.id">
                   <i 
                     class='far fa-2x fa-trash-alt colorDanger ml-3'
                     @click="deletePost(post.id)"

@@ -1,75 +1,77 @@
 <template>
-  <div class="container w-75 mt-5">
-    <h2>Alta nuevo Post</h2>
-    <form
-        v-if="!notification.type"
-        @submit.prevent="createPostVUE"
-        action="#">
-      <div class="form-group">
-        <label for="title">Título</label>
-        <input type="text" class="form-control" id="title" placeholder="Título" v-model="post.title" :aria-describedby="errors.title !== null ? 'errors-title' : null">
+  <main>
+    <div class="container w-75 mt-5">
+      <h2>Alta nuevo Post</h2>
+      <form
+          v-if="!notification.type"
+          @submit.prevent="createPostVUE"
+          action="#">
+        <div class="form-group">
+          <label for="title">Título</label>
+          <input type="text" class="form-control" id="title" placeholder="Título" v-model="post.title" :aria-describedby="errors.title !== null ? 'errors-title' : null">
+          <div
+              v-if="errors.title !== null"
+              id="errors-title"
+              class="text-danger"
+          >{{ errors.title }}</div>
+        </div>
+        <div class="form-group">
+          <label for="content">Contenido</label>
+          <textarea class="form-control" id="content" rows="3" v-model="post.content" :aria-describedby="errors.content !== null ? 'errors-content' : null"></textarea>
+          <div
+              v-if="errors.content !== null"
+              id="errors-content"
+              class="text-danger"
+          >{{ errors.content }}</div>
+        </div>
+        <div class="form-group">
+          <label for="category">Categoría</label>
+          <select class="form-control" id="category" v-model="post.category_id" :aria-describedby="errors.category_id !== null ? 'errors-category_id' : null">
+            <option
+                v-for="category in categories"
+                :value="category.id"
+                :key="category.id"
+            >{{ category.name }}</option>
+          </select>
+          <div
+              v-if="errors.category_id !== null"
+              id="errors-category_id"
+              class="text-danger"
+          >{{ errors.category_id }}</div>
+        </div>
+
+        <div class="custom-file mt-4">
+          <input type="file" class="custom-file-input" id="post_pic" ref="post_pic" @change="loadPic">
+          <label class="custom-file-label" for="post_pic" data-browse="Buscar">Eliga una imagen</label>
+        </div>
+
         <div
-            v-if="errors.title !== null"
-            id="errors-title"
-            class="text-danger"
-        >{{ errors.title }}</div>
-      </div>
-      <div class="form-group">
-        <label for="content">Contenido</label>
-        <textarea class="form-control" id="content" rows="3" v-model="post.content" :aria-describedby="errors.content !== null ? 'errors-content' : null"></textarea>
-        <div
-            v-if="errors.content !== null"
-            id="errors-content"
-            class="text-danger"
-        >{{ errors.content }}</div>
-      </div>
-      <div class="form-group">
-        <label for="category">Categoría</label>
-        <select class="form-control" id="category" v-model="post.category_id" :aria-describedby="errors.category_id !== null ? 'errors-category_id' : null">
-          <option
-              v-for="category in categories"
-              :value="category.id"
-              :key="category.id"
-          >{{ category.name }}</option>
-        </select>
-        <div
-            v-if="errors.category_id !== null"
-            id="errors-category_id"
-            class="text-danger"
-        >{{ errors.category_id }}</div>
-      </div>
+          v-if="post.post_pic !== null">
+            <p>Previsualizacion de la portada</p>
+            <img
+                class="imgPreview"
+                :src="post.post_pic"
+                alt="Imagen de Portada">
 
-      <div class="custom-file mt-4">
-        <input type="file" class="custom-file-input" id="post_pic" ref="post_pic" @change="loadPic">
-        <label class="custom-file-label" for="post_pic" data-browse="Buscar">Eliga una imagen</label>
-      </div>
-
-      <div
-        v-if="post.post_pic !== null">
-          <p>Previsualizacion de la portada</p>
-          <img
-              class="imgPreview"
-              :src="post.post_pic"
-              alt="Imagen de Portada">
-
-      </div>
-      <button type="submit" class="btn btn-logout btn-create">Crear</button>
-    </form>
+        </div>
+        <button type="submit" class="btn btn-logout btn-create">Crear</button>
+      </form>
 
 
-    <CheckSuccess
-        v-if="notification.type !== null & notification.type"
-        :msg="notification.msg"
-        class="checkNotific">
-    </CheckSuccess>
+      <CheckSuccess
+          v-if="notification.type !== null & notification.type"
+          :msg="notification.msg"
+          class="checkNotific">
+      </CheckSuccess>
 
-    <CheckError
-        v-if="notification.type !== null & !notification.type"
-        :msg="notification.msg"
-        class="checkNotific">
-    </CheckError>
+      <CheckError
+          v-if="notification.type !== null & !notification.type"
+          :msg="notification.msg"
+          class="checkNotific">
+      </CheckError>
 
-  </div>
+    </div>
+  </main>
 </template>
 
 
@@ -88,6 +90,7 @@ export default {
   data () {
     return {
       post: {
+        owner_id: null,
         title: null,
         content: null,
         category_id: null,
@@ -121,9 +124,9 @@ export default {
       // Si no pasa la validación, no realizamos la petición.
       if(!this.validates()) return;
 
-      /**
-       * Verifico si hay cargada una imagen
-       */
+
+      let getUser = JSON.parse(localStorage.getItem('userData'));
+      this.post.owner_id = getUser.id;
 
       apiFetch("newPost",{
         method: 'POST',
@@ -136,6 +139,7 @@ export default {
               this.notification.type = res.success;
               this.notification.msg = res.msg;
               this.post = {
+                owner_id: null,
                 title: null,
                 content: null,
                 category_id: null,
@@ -190,16 +194,16 @@ export default {
         .then(data => {
           this.categories = data;
           //console.log(this.categories);
-        })
-
-  }
+        });
+    }
 }
 </script>
 
 
 <style>
 .imgPreview {
-  width: 200px
+  width: 200px;
+  border-radius: 20px;
 }
 .checkNotific{
   left: 50%;
