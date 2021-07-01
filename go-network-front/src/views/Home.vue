@@ -1,5 +1,7 @@
 <template>
   <main class="container">
+    <LoaderComponent v-if="loading" />
+
     <div class="container" 
     v-for="post in posts" 
     :key="post.id">
@@ -44,13 +46,6 @@
                   </a>
             </li>
 
-            <li class="shares">
-                  <i 
-                    class='far fa-2x fa-heart colorMain'
-                    @click="fillHeart"
-                  ></i>
-            </li>
-
             <li class="edit">
               <router-link :to="`home/${post.id}`">
                   <i 
@@ -84,12 +79,12 @@
 
     </div>
     <NewPostBtn />
-    
   </main>
 </template>
 
 <script>
 import NewPostBtn from "@/components/NewPostBtn.vue";
+import LoaderComponent from "@/components/LoaderComponent.vue";
 import { apiFetch } from "@/api/fetch";
 import {API_IMAGES} from "@/env/env";
 import authService from "../services/auth.js";
@@ -98,13 +93,15 @@ import authService from "../services/auth.js";
 export default {
   name: "Home",
   components: {
-    NewPostBtn, 
+    NewPostBtn,
+    LoaderComponent
   },
   data: function () {
     return {
       posts: [],
       comments: [],
       isFilled: true,
+      loading : false,
       auth: {
         user: {
             id: null,
@@ -119,10 +116,13 @@ export default {
       return `${API_IMAGES}/${image}`;
     },
     loadPosts() {
+      this.loading = true;
       apiFetch("posts")
       .then((res) => {
         this.posts = res;
+        this.loading = false;
       });
+
     },
 
     deletePost(id){
@@ -137,14 +137,6 @@ export default {
         .then((res) => {
           this.comments = res;
         })
-    },
-
-    fillHeart(evt) {
-      if (evt.target.className == "far fa-2x fa-heart colorMain") {
-          evt.target.className = "fas fa-2x fa-heart colorMain";
-      } else {
-          evt.target.className = "far fa-2x fa-heart colorMain";
-      }
     },
 
     getAllComments() {

@@ -7,6 +7,8 @@
 
     <form action="#"
           @submit.prevent="register">
+
+      <ProfilePic />
       <div class="form-group">
         <label for="name" class="sr-only">Nombre</label>
         <input
@@ -85,7 +87,7 @@
             placeholder="Ingresá tu Imágen de Perfil"
         >
       </div>
-
+      <ProfilePicture></ProfilePicture>
       <input name="newUser" id="newUser" class="btn btn-block login-btn mb-4" type="submit" value="Registrarse">
 
     </form>
@@ -95,9 +97,13 @@
 
 <script>
 import { apiFetch } from "@/api/fetch";
+import ProfilePicture from "@/components/ProfilePic.vue";
 
 export default {
   name: 'Register',
+  components: {
+    ProfilePicture
+  },
   data() {
     return {
       user: {
@@ -113,7 +119,7 @@ export default {
       loading: false,
       notification: {
         msg: null,
-        type: 'success',
+        type: null,
       },
     };
   },

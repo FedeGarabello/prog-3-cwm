@@ -208,6 +208,7 @@ class Posts implements \JsonSerializable {
      * @return Array con objetos Post
      */
     public function getAllPosts() {
+
         $db = DBConnection::getConnection();
         $query = 'SELECT 
                 p.*, c.name as name FROM post p
@@ -236,6 +237,7 @@ class Posts implements \JsonSerializable {
 
             $output[] = $post;
         }
+        sleep(1.2);
         return $output;
     }
 
