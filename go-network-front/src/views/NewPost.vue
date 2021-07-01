@@ -120,10 +120,10 @@ export default {
       });
       reader.readAsDataURL(this.$refs.post_pic.files[0]);
     },
+
     createPostVUE(){
       // Si no pasa la validación, no realizamos la petición.
       if(!this.validates()) return;
-
 
       let getUser = JSON.parse(localStorage.getItem('userData'));
       this.post.owner_id = getUser.id;
@@ -133,9 +133,7 @@ export default {
         body: JSON.stringify(this.post)
       })
           .then(res => {
-            console.log(res);
             if(res.success) {
-
               this.notification.type = res.success;
               this.notification.msg = res.msg;
               this.post = {

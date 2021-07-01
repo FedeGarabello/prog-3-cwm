@@ -2,19 +2,21 @@
   <main class="container">
     <LoaderComponent v-if="loading" />
 
-    <div class="container" 
-    v-for="post in posts" 
-    :key="post.id">
-
-      <input type="hidden" name="" value="{{post.id}}">
+    <div class="container" v-for="post in posts" :key="post.id">
+      <input type="hidden" name="" value="{{post.id}}" />
 
       <div class="blog-container">
         <div class="blog-header">
-            <div class="blog-cover" :style="`background:url(${imageURL(post.post_pic)}); background-size: cover;`">
-              <div class="blog-author">
-                <h3>{{ post.user_name }} {{ post.last_name }}</h3>
-              </div>
+          <div
+            class="blog-cover"
+            :style="`background:url(${imageURL(
+              post.post_pic
+            )}); background-size: cover;`"
+          >
+            <div class="blog-author">
+              <h3>{{ post.user_name }} {{ post.last_name }}</h3>
             </div>
+          </div>
         </div>
 
         <div class="blog-body mt-3">
@@ -29,7 +31,7 @@
           <div class="blog-tags">
             <ul>
               <p class="category-name">
-                {{ post.category_id.name}}
+                {{ post.category_id.name }}
               </p>
             </ul>
           </div>
@@ -40,44 +42,66 @@
             <li class="published-date">{{ post.created_At }}</li>
 
             <li class="comments accordion" id="accordionExample">
-                  <a href="#" data-toggle="collapse" :data-target="`#collapseOne${post.id}`" aria-expanded="true" aria-controls="collapseOne"
-                  @click="loadComments(post.id)">
-                    <i class="far fa-2x fa-comments colorMain" id="headingOne"></i>
-                  </a>
+              <a
+                href="#"
+                data-toggle="collapse"
+                :data-target="`#collapseOne${post.id}`"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+                @click="loadComments(post.id)"
+              >
+                <i class="far fa-2x fa-comments colorMain" id="headingOne"></i>
+              </a>
             </li>
 
-            <li class="edit"
-                v-if="post.owner_id == auth.user.id">
+            <li class="edit" v-if="post.owner_id == auth.user.id">
               <router-link :to="`home/${post.id}`">
-                  <i 
-                    class='far fa-2x fa-edit colorMain'
-                  ></i>
+                <i class="far fa-2x fa-edit colorMain"></i>
               </router-link>
             </li>
 
-            <li class="delete"
-              v-if="post.owner_id == auth.user.id">
-                  <i 
-                    class='far fa-2x fa-trash-alt colorDanger ml-3'
-                    @click="deletePost(post.id)"
-                  ></i>
+            <li class="delete" v-if="post.owner_id == auth.user.id">
+              <i
+                class="far fa-2x fa-trash-alt colorDanger ml-3"
+                @click="deletePost(post.id)"
+              ></i>
             </li>
-
           </ul>
-
         </div>
+
+        <!-- NewComment -->
+        <form class="pb-3" @submit.prevent="addComment(post.id, auth.user.id)" action="#">
+          <div class="form-group d-flex container" id="new-comment">
+            <input
+              type="text"
+              class="form-control"
+              id="comment"
+              placeholder="Dejá tu comentario..."
+              v-model="comment.content"
+            />
+
+            <button id="buttonComment" type="submit"><i class="fas fa-paper-plane"></i> </button>
+          </div>
+        </form>
 
         <!-- Comentarios -->
         <div class="accordion" id="accordionExample">
-              <div :id="`collapseOne${post.id}`" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body"
-                  v-for="comment in comments" :key="comment.id">
-                    <p class="colorMain">{{comment.comment}}</p>
-                </div>
-              </div>
+          <div
+            :id="`collapseOne${post.id}`"
+            class="collapse"
+            aria-labelledby="headingOne"
+            data-parent="#accordionExample"
+          >
+            <div
+              class="card-body"
+              v-for="comment in comments"
+              :key="comment.id"
+            >
+              <p class="colorMain">{{ comment.comment }}</p>
             </div>
+          </div>
         </div>
-
+      </div>
     </div>
     <NewPostBtn />
   </main>
@@ -87,77 +111,109 @@
 import NewPostBtn from "@/components/NewPostBtn.vue";
 import LoaderComponent from "@/components/LoaderComponent.vue";
 import { apiFetch } from "@/api/fetch";
-import {API_IMAGES} from "@/env/env";
+import { API_IMAGES } from "@/env/env";
 import authService from "../services/auth.js";
-
 
 export default {
   name: "Home",
   components: {
     NewPostBtn,
-    LoaderComponent
+    LoaderComponent,
   },
   data: function () {
     return {
       posts: [],
       comments: [],
       isFilled: true,
-      loading : false,
+      loading: false,
       auth: {
         user: {
-            id: null,
-            email: null,
+          id: null,
+          email: null,
         },
-      }
+      },
+      comment: {
+        content: null,
+      },
     };
   },
 
   methods: {
-    imageURL(image){
+    imageURL(image) {
       return `${API_IMAGES}/${image}`;
     },
     loadPosts() {
       this.loading = true;
-      apiFetch("posts")
-      .then((res) => {
+      apiFetch("posts").then((res) => {
         this.posts = res;
         this.loading = false;
       });
-
     },
 
-    deletePost(id){
-      apiFetch(`deletePost/${id}`)
-        .then((res) => {
-          this.loadPosts();
-        })
+    deletePost(id) {
+      apiFetch(`deletePost/${id}`).then((res) => {
+        this.loadPosts();
+      });
+    },
+
+    addComment(id, owner) {
+      let obj = {
+        post_id: id,
+        owner_id: owner,
+        content: this.comment.content
+      }
+      apiFetch("createComment", {
+        method: "POST",
+        body: JSON.stringify(
+          obj
+        ),
+      }).then((res) => {
+        if (res.success) {
+          this.comment = {
+            post_id: null,
+            owner_id: null,
+            content: null,
+          };
+          this.getAllComments();
+        }
+      });
     },
 
     loadComments(id) {
-      apiFetch(`comments/${id}`)
-        .then((res) => {
-          this.comments = res;
-        })
+      apiFetch(`comments/${id}`).then((res) => {
+        this.comments = res;
+      });
     },
 
     getAllComments() {
-      return this.comments
-    }
+      return this.comments;
+    },
   },
 
   mounted() {
-    if(authService.isAuthenticated()) {
+    if (authService.isAuthenticated()) {
       this.auth.user = authService.getUserData();
     }
 
-    this.loadComments()
-    this.loadPosts()
-  }
-
+    this.loadComments();
+    this.loadPosts();
+  },
 };
 </script>
 
 <style>
+#new-comment{
+  width: 80%;
+  padding: 0;
+}
+
+#buttonComment {
+  padding: 0px 40px;
+  border: none;
+  color: white;
+  background-color: #3386AF;  
+}
+
 .blog-container {
   background: #fff;
   border-radius: 5px;

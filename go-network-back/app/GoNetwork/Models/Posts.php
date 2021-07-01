@@ -9,7 +9,6 @@ use GoNetwork\DBConnection\DBConnection;
 use PDO;
 use stdClass;
 use GoNetwork\Auth\Auth;
-use GoNetwork\Auth\TokenService;
 
 class Posts implements \JsonSerializable {
 

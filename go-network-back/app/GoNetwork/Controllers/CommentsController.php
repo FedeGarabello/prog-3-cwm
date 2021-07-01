@@ -16,4 +16,12 @@ class CommentsController
         $posts = (new Comments())->getAllCommentsByPost($id);
         View::renderJson($posts);
     }
+
+    public function createComment() {
+        $inputData = file_get_contents('php://input');
+        $postData = json_decode($inputData, true);
+        
+        $posts = (new Comments())->createComment($postData);
+        View::renderJson($posts);
+    }
 }

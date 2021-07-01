@@ -4,6 +4,8 @@ namespace GoNetwork\Models;
 require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
+use GoNetwork\Auth\Auth;
+
 
 class Comments implements \JsonSerializable{
     
@@ -144,5 +146,37 @@ class Comments implements \JsonSerializable{
             $output[] = $post;
         }
         return $output;
+    }
+
+    public function createComment($data) {
+
+        $auth = new Auth();
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
+        }
+
+        $db = DBConnection::getConnection();
+        $query = 'INSERT INTO comment (post_id, owner_id, content)
+                    VALUES (:post_id, :owner_id, :content)';
+
+        $stmt = $db->prepare($query);
+
+        if(!$stmt->execute([
+            "post_id"   => $data['post_id'],
+            "owner_id"  => $data['owner_id'],
+            "content"   => $data['content'],
+        ])){
+            return [
+                'success' => false,
+                'msg' => 'Error al crear el Post'
+            ];
+        };
+
+        return [
+            'success' => true,
+            'msg' => 'Post creado con éxito'
+        ];
     }
 }
