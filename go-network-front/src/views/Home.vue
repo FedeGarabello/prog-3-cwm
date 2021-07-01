@@ -60,12 +60,20 @@
               </router-link>
             </li>
 
-            <li class="delete" v-if="post.owner_id == auth.user.id">
+            <li class="delete" v-if="post.owner_id == auth.user.id && !confirmDeletePost || confirmDeletePost != post.id">
               <i
                 class="far fa-2x fa-trash-alt colorDanger ml-3"
-                @click="deletePost(post.id)"
+                @click="requestDeleteConfirmation(post.id)"
               ></i>
             </li>
+
+            <!-- <li v-else>
+              <span class="confirmDeleteText">Seguro?</span>
+              <div>
+                <button class="btn-cancel-delete" @click="cancelDeleteConfirmation">Cancelar</button>
+                <button class="btn-confirm-delete" @click="deletePost(post.id)">Si, borrar</button>
+              </div>
+            </li> -->
           </ul>
         </div>
 
@@ -135,6 +143,7 @@ export default {
       comment: {
         content: null,
       },
+      confirmDeletePost: null,
     };
   },
 
@@ -148,6 +157,14 @@ export default {
         this.posts = res;
         this.loading = false;
       });
+    },
+
+    requestDeleteConfirmation(id) {
+      this.confirmDeletePost = id
+    },
+
+    cancelDeleteConfirmation(){
+      this.confirmDeletePost = null
     },
 
     deletePost(id) {
@@ -202,6 +219,30 @@ export default {
 </script>
 
 <style>
+
+.confirmDeleteText{
+  position: absolute;
+  bottom: 25px;
+  left: 50px;
+}
+
+
+.btn-confirm-delete {
+  border: none;
+  background-color: #3386AF;
+  color: white;
+  padding: 3px 10px;
+  margin: 0px 3px;
+}
+
+.btn-cancel-delete {
+  border: none;
+  background-color: #8a3333;
+  color: white;
+  padding: 3px 10px;
+  margin: 0px 3px;
+}
+
 #new-comment{
   width: 80%;
   padding: 0;
@@ -228,10 +269,6 @@ export default {
   color: #4d4dff;
   text-decoration: none;
   transition: 0.25s ease;
-  /* &:hover {
-    border-color: #ff4d4d;
-    color: #ff4d4d;
-  } */
 }
 
 .blog-cover {
