@@ -67,27 +67,30 @@
               ></i>
             </li>
 
-            <!-- <li v-else>
+            <li v-else>
               <span class="confirmDeleteText">Seguro?</span>
               <div>
                 <button class="btn-cancel-delete" @click="cancelDeleteConfirmation">Cancelar</button>
                 <button class="btn-confirm-delete" @click="deletePost(post.id)">Si, borrar</button>
               </div>
-            </li> -->
+            </li>
           </ul>
         </div>
 
         <!-- NewComment -->
+
+        <div v-if="errors.content !== null" id="errors-comment-content" class="container text-danger mb-2">{{ errors.content }}</div>
         <form class="pb-3" @submit.prevent="addComment(post.id, auth.user.id)" action="#">
           <div class="form-group d-flex container" id="new-comment">
+
             <input
               type="text"
               class="form-control"
               id="comment"
               placeholder="Dejá tu comentario..."
               v-model="comment.content"
+              :aria-describedby="errors.content !== null ? 'errors-comment-content' : null"
             />
-
             <button id="buttonComment" type="submit"><i class="fas fa-paper-plane"></i> </button>
           </div>
         </form>
@@ -144,6 +147,9 @@ export default {
         content: null,
       },
       confirmDeletePost: null,
+      errors: {
+        content: null,
+      }
     };
   },
 
@@ -174,6 +180,8 @@ export default {
     },
 
     addComment(id, owner) {
+      if(!this.validates()) return;
+
       let obj = {
         post_id: id,
         owner_id: owner,
@@ -205,6 +213,19 @@ export default {
     getAllComments() {
       return this.comments;
     },
+
+    validates() {
+      let hasErrors = false;
+
+      if(this.comment.content == null || this.comment.content === ''){
+        this.errors.content = 'Ingresá un comentario';
+        hasErrors = true;
+      } else {
+        this.errors.content = null;
+        hasErrors = false;
+      }
+      return !hasErrors;
+    }
   },
 
   mounted() {
@@ -219,6 +240,11 @@ export default {
 </script>
 
 <style>
+
+#errors-comment-content{
+  width: 80%;
+  padding: 0;
+}
 
 .confirmDeleteText{
   position: absolute;

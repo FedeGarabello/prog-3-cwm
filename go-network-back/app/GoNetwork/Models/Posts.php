@@ -367,11 +367,11 @@ class Posts implements \JsonSerializable {
         $stmt = $db->prepare($query);
 
         if(!$stmt->execute([
-            "owner_id" => $data['owner_id'],
-            "title" => $data['title'],
-            "content" => $data['content'],
-            "category_id" => $data['category_id'],
-            "post_pic" => $data['post_pic']
+            "owner_id"      => $data['owner_id'],
+            "title"         => $data['title'],
+            "content"       => $data['content'],
+            "category_id"   => $data['category_id'],
+            "post_pic"      => $data['post_pic']
         ])){
             return [
                 'success' => false,
