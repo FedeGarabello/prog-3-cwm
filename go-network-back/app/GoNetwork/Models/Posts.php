@@ -309,15 +309,12 @@ class Posts implements \JsonSerializable {
     public function editPostById($data) {
 
         $auth = new Auth();
-        $tokenCookie = $auth->getUserToken();
-
-
-        $validateToken = new TokenService();
-        $validateToken->validateToken($tokenCookie);
-
-        if (!$validateToken){
-            return false;
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
         }
+
 
         if ($data['post_pic'] === null) {
             $data['post_pic'] = "post_pic.jpg";
@@ -355,14 +352,10 @@ class Posts implements \JsonSerializable {
      */
     public function createPost($data) {
         $auth = new Auth();
-        $tokenCookie = $auth->getUserToken();
-
-
-        $validateToken = new TokenService();
-        $validateToken->validateToken($tokenCookie);
-
-        if (!$validateToken){
-            return false;
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
         }
 
         if ($data['post_pic'] === null) {
@@ -395,14 +388,10 @@ class Posts implements \JsonSerializable {
 
     public function deletePost($post_id){
         $auth = new Auth();
-        $tokenCookie = $auth->getUserToken();
-
-
-        $validateToken = new TokenService();
-        $validateToken->validateToken($tokenCookie);
-
-        if (!$validateToken){
-            return false;
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
         }
 
         $db = DBConnection::getConnection();

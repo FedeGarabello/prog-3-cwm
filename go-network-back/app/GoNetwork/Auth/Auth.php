@@ -68,4 +68,15 @@ class Auth
         $token = $_COOKIE['token'] ?? null;
         return $token;
     }
+
+    public function validateTokenForUser() {
+        $token = $this->getUserToken();
+        $tokenService = new TokenService();
+
+        if(!$tokenService->validateToken($token)){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
