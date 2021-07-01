@@ -63,7 +63,7 @@ class Auth
      *
      * @return bool
      */
-    public function getToken()
+    public function getUserToken()
     {
         $token = $_COOKIE['token'] ?? null;
         return $token;

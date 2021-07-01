@@ -4,9 +4,12 @@ namespace GoNetwork\Models;
 
 require_once __DIR__ . '/../../../bootstrap/init.php';
 
+
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 use stdClass;
+use GoNetwork\Auth\Auth;
+use GoNetwork\Auth\TokenService;
 
 class Posts implements \JsonSerializable {
 
@@ -279,29 +282,70 @@ class Posts implements \JsonSerializable {
      * @return array
      */
     public function getPostById($id) {
+
         $db = DBConnection::getConnection();
         $query = 'SELECT * from post
                     WHERE id = ?';
         $stmt = $db->prepare($query);
-        $stmt->execute([$id]);
+        if(!$stmt->execute([$id])) {
+            return null;
+        };
 
-        $output = [];
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        $post = new self();
+        $post->setId($row['id']);
+        $post->setTitle($row['title']);
+        $post->setContent($row['content']);
+        $post->setPostPic($row['post_pic']);
+        $post->setOwnerId($row['owner_id']);
+        $post->setLikes($row['likes']);
+        $post->setCategoryId($row['category_id']);
+        $post->setCreatedAt($row['created_at']);
 
-            $post = new self();
-            $post->setId($row['id']);
-            $post->setTitle($row['title']);
-            $post->setContent($row['content']);
-            $post->setPostPic($row['post_pic']);
-            $post->setOwnerId($row['owner_id']);
-            $post->setLikes($row['likes']);
-            $post->setCategoryId($row['category_id']);
-            $post->setCreatedAt($row['created_at']);
+        return $post;
+    }
 
-            $output[] = $post;
+    public function editPostById($data) {
+
+        $auth = new Auth();
+        $tokenCookie = $auth->getUserToken();
+
+
+        $validateToken = new TokenService();
+        $validateToken->validateToken($tokenCookie);
+
+        if (!$validateToken){
+            return false;
         }
-        return $output;
+
+        if ($data['post_pic'] === null) {
+            $data['post_pic'] = "post_pic.jpg";
+        }
+
+        $db = DBConnection::getConnection();
+        $query = 'UPDATE post SET `title` = :title, `content` = :content, `post_pic` = :post_pic, 
+                `category_id` = :category_id
+                WHERE (`id` = :id);';
+        $stmt = $db->prepare($query);
+
+        if(!$stmt->execute([
+            'id'            => $data['id'],
+            "title"         => $data['title'],
+            "content"       => $data['content'],
+            "category_id"   => $data['category_id'],
+            "post_pic"      => $data['post_pic']
+        ])){
+            return [
+                'success' => false,
+                'msg' => 'Error al crear el Post'
+            ];
+        };
+
+        return [
+            'success' => true,
+            'msg' => 'Post creado con éxito'
+        ];
     }
 
     /**
@@ -310,6 +354,16 @@ class Posts implements \JsonSerializable {
      * @return array
      */
     public function createPost($data) {
+        $auth = new Auth();
+        $tokenCookie = $auth->getUserToken();
+
+
+        $validateToken = new TokenService();
+        $validateToken->validateToken($tokenCookie);
+
+        if (!$validateToken){
+            return false;
+        }
 
         if ($data['post_pic'] === null) {
             $data['post_pic'] = "post_pic.jpg";
@@ -317,10 +371,11 @@ class Posts implements \JsonSerializable {
 
         $db = DBConnection::getConnection();
         $query = 'INSERT INTO post (title, content, owner_id, likes, category_id, post_pic)
-                    VALUES (:title, :content, 1, 0, :category_id, :post_pic)';
+                    VALUES (:title, :content, :owner_id, 0, :category_id, :post_pic)';
         $stmt = $db->prepare($query);
 
         if(!$stmt->execute([
+            "owner_id" => $data['owner_id'],
             "title" => $data['title'],
             "content" => $data['content'],
             "category_id" => $data['category_id'],
@@ -339,6 +394,17 @@ class Posts implements \JsonSerializable {
     }
 
     public function deletePost($post_id){
+        $auth = new Auth();
+        $tokenCookie = $auth->getUserToken();
+
+
+        $validateToken = new TokenService();
+        $validateToken->validateToken($tokenCookie);
+
+        if (!$validateToken){
+            return false;
+        }
+
         $db = DBConnection::getConnection();
         $query = 'UPDATE post SET is_active = 0
                     where id = ?';

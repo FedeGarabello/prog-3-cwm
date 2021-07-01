@@ -18,10 +18,18 @@ class PostsController
 
     public function getPostById() {
         $id = Route::getUrlParameters()['id'];
-        $posts = (new Posts())->getPostById($id);
-        View::renderJson($posts);
+        $post = (new Posts())->getPostById($id);
+        View::renderJson($post);
     }
-    
+
+    public function editPostById() {
+        $inputData = file_get_contents('php://input');
+        $postData = json_decode($inputData, true);
+
+        $post = (new Posts())->editPostById($postData);
+        View::renderJson($post);
+    }
+
     /**
      * Recibe un objeto POST para insertar
      * @return boolean
