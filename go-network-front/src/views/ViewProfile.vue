@@ -39,19 +39,23 @@
              >
            </div>
 
+
+
+
+
            <div class="form-group">
-             <label for="gender_id" >Género</label>
-             <input
-                 type="text"
+             <label for="gender_id">Género</label>
+             <select
                  name="gender_id"
                  id="gender_id"
                  class="form-control"
                  v-model="userData.gender_id"
-                 placeholder="Ingresá tu Género"
              >
+               <option value="1">Masculino</option>
+               <option value="2">Femenino</option>
+             </select>
            </div>
            <div class="mt-2">
-             <p class="mt-1">Fecha de Nacimiento: {{userData.birth_date}}</p>
              <p class="mt-1">Miembro desde: {{userData.created_at}}</p>
            </div>
            <input name="editProfile" id="editProfile" class="btn btn-block login-btn mb-4" type="submit" value="Editar Perfil">
@@ -127,7 +131,6 @@ export default {
           body: JSON.stringify(this.userData)
         })
             .then(res => {
-              console.log(res);
               if(res.success) {
 
                 this.notification.type = res.success;

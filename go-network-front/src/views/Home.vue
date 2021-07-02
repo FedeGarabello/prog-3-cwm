@@ -2,6 +2,7 @@
   <main class="container">
     <LoaderComponent v-if="loading" />
 
+    <div v-if="posts.length > 0">
     <div class="container" v-for="post in posts" :key="post.id">
       <input type="hidden" name="" value="{{post.id}}" />
 
@@ -129,6 +130,13 @@
         </div>
       </div>
     </div>
+    </div>
+
+    <div class="container text-center mt-5" v-else-if="posts.length = 0">
+      <p class="font-weight-bold">No hay POST para mostrar.</p>
+      <p class="font-weight-bold">Crea uno nuevo con el botón <span class="colorMain">+</span> </p>
+    </div>
+
     <NewPostBtn />
   </main>
 </template>
@@ -197,7 +205,7 @@ export default {
     },
 
     deletePost(id) {
-      apiFetch(`deletePost/${id}`).then((res) => {
+      apiFetch(`deletePost/${id}`).then(() => {
         this.loadPosts();
       });
     },
@@ -266,7 +274,6 @@ export default {
     if (authService.isAuthenticated()) {
       this.auth.user = authService.getUserData();
     }
-    this.loadComments();
     this.loadPosts();
   },
 };

@@ -69,7 +69,7 @@ import authService from "../services/auth.js";
 
 export default {
     name: 'Login',
-        emits: ['logged'],
+    emits: ['logged'],
     data() {
         return {
             errorLogin: null,

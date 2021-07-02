@@ -62,7 +62,6 @@
           <option value="1">Masculino</option>
           <option value="2">Femenino</option>
         </select>
-
       </div>
 
       <input name="newUser" id="newUser" class="btn btn-block login-btn mb-4" type="submit" value="Registrarse">
@@ -87,9 +86,11 @@
 import { apiFetch } from "@/api/fetch";
 import CheckSuccess from "@/components/CheckSuccess";
 import CheckError from "@/components/CheckError";
+import authService from "../services/auth.js";
 
 export default {
   name: 'Register',
+  emits: ['logged'],
   components: {
     CheckSuccess,
     CheckError
@@ -102,7 +103,6 @@ export default {
         email: null,
         password: null,
         gender_id: null,
-        birth_date: null,
         profile_pic: null
       },
       loading: false,
@@ -122,7 +122,17 @@ export default {
       })
         .then(res => {
           if(res.success) {
-
+            authService
+                .login(this.user.email, this.user.password)
+                .then(response => {
+                    this.loading = false;
+                    if(response.error) {
+                        this.errorLogin = true;
+                    }else{                            
+                        this.$emit('logged', response.data);
+                    }
+                    
+                });
             this.notification.type = res.success;
             this.notification.msg = res.msg;
             this.user = {
@@ -131,13 +141,11 @@ export default {
               email: null,
               password: null,
               gender_id: null,
-              birth_date: null,
               profile_pic: null
             };
-
             setTimeout(() => {
-              this.$router.push('/login')
-            }, 3000 );
+              this.$router.push('/')
+            }, 1500 );
           }
 
         });
