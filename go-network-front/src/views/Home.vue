@@ -92,22 +92,21 @@
 
         <div v-if="errors.content !== null" id="errors-comment-content" class="container text-danger mb-2">{{ errors.content }}</div>
         <form class="pb-3" @submit.prevent="addComment(post.id, auth.user.id)" action="#">
-          <div class="form-group d-flex container" id="new-comment">
+          <div class="form-group d-flex container new-comment">
 
             <input
               type="text"
               class="form-control"
-              id="comment"
               placeholder="Dejá tu comentario..."
               v-model="comment.content"
               :aria-describedby="errors.content !== null ? 'errors-comment-content' : null"
             />
-            <button id="buttonComment" type="submit"><i class="fas fa-paper-plane"></i> </button>
+            <button type="submit" class="buttonComment"><i class="fas fa-paper-plane"></i> </button>
           </div>
         </form>
 
         <!-- Comentarios -->
-        <div class="accordion pb-3" :id="`accordionExample${post.id}`">
+        <div class="accordion pb-3">
           <div
             :id="`collapseOne${post.id}`"
             class="collapse accordion-container"
@@ -337,12 +336,12 @@ export default {
   margin: 0px 3px;
 }
 
-#new-comment{
+.new-comment{
   width: 80%;
   padding: 0;
 }
 
-#buttonComment {
+.buttonComment {
   padding: 0px 40px;
   border: none;
   color: white;
