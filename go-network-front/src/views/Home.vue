@@ -217,6 +217,10 @@ export default {
             content: null,
           };
           this.getAllComments();
+
+          let accordionContainer = document.querySelector('.accordion-container');
+          accordionContainer.className = 'accordion-container collapse'
+
         }
       });
     },
@@ -226,14 +230,6 @@ export default {
         this.comments = res;
       });
     },
-
-    // validateUserDelete(owner, user){
-    //    if (owner == user) {
-    //      return true;
-    //    } else {
-    //      return false;
-    //    }
-    // },
 
     getAllComments() {
       return this.comments;
