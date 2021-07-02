@@ -4,6 +4,7 @@ namespace GoNetwork\Models;
 require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
+use stdClass;
 use GoNetwork\Auth\Auth;
 
 
@@ -128,8 +129,9 @@ class Comments implements \JsonSerializable{
 
     public function getAllCommentsByPost($post_id) {
         $db = DBConnection::getConnection();
-        $query = 'SELECT * from comment
-                WHERE post_id = ?';
+        $query = 'SELECT c.*, u.name as name, u.last_name as last_name FROM `comment` c
+                INNER JOIN `user` u ON c.owner_id = u.id
+                WHERE c.post_id = ?';
 
         $stmt = $db->prepare($query);
         $stmt->execute([$post_id]);
@@ -137,10 +139,14 @@ class Comments implements \JsonSerializable{
         $output = [];
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $categories = new stdClass();
+            $categories->name = $row['name'];
+            $categories->last_name = $row['last_name'];
+
             $post = new self();
             $post->setId($row['id']);
             $post->setPostId($row['post_id']);
-            $post->setOwnerId($row['owner_id']);
+            $post->setOwnerId($categories);
             $post->setComment($row['content']);
             $post->setCreatedAt($row['created_at']);
             $output[] = $post;

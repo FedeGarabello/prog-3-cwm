@@ -60,20 +60,28 @@
               </router-link>
             </li>
 
-            <li class="delete" v-if="post.owner_id == auth.user.id && !confirmDeletePost || confirmDeletePost != post.id">
+            <!-- Tacho de Basura -->
+            <li class="delete" >
               <i
+                v-if="confirmDeletePost === null || confirmDeletePost != post.id"
                 class="far fa-2x fa-trash-alt colorDanger ml-3"
                 @click="requestDeleteConfirmation(post.id)"
               ></i>
+              
+              <div v-else>
+
+                <p v-if="!canDelete(post.owner_id, auth.user.id)">No podes borrar el post</p>
+
+                <div v-else>                  
+                  <span class="confirmDeleteText">Seguro?</span>
+                  <button class="btn-cancel-delete" @click="cancelDeleteConfirmation">Cancelar</button>
+                  <button class="btn-confirm-delete" @click="deletePost(post.id)">Si, borrar</button>
+                </div>
+
+              </div>
+
             </li>
 
-            <li v-else>
-              <span class="confirmDeleteText">Seguro?</span>
-              <div>
-                <button class="btn-cancel-delete" @click="cancelDeleteConfirmation">Cancelar</button>
-                <button class="btn-confirm-delete" @click="deletePost(post.id)">Si, borrar</button>
-              </div>
-            </li>
           </ul>
         </div>
 
@@ -96,19 +104,20 @@
         </form>
 
         <!-- Comentarios -->
-        <div class="accordion" id="accordionExample">
+        <div class="accordion pb-3" id="accordionExample">
           <div
             :id="`collapseOne${post.id}`"
-            class="collapse"
+            class="collapse accordion-container"
             aria-labelledby="headingOne"
             data-parent="#accordionExample"
           >
             <div
-              class="card-body"
+              class="card-body card-comments"
               v-for="comment in comments"
               :key="comment.id"
             >
-              <p class="colorMain">{{ comment.comment }}</p>
+              <p class="commentOwner colorMain">{{comment.owner_id.name}} {{comment.owner_id.last_name}} <span class="commentDate">{{comment.created_at}}</span></p>
+              <p class="mainGrey ml-2 comment-text">{{ comment.comment }}</p>
             </div>
           </div>
         </div>
@@ -165,6 +174,14 @@ export default {
       });
     },
 
+    canDelete(post, user){
+      if(post !== user) {
+        return false
+      } else {
+        return true;
+      }
+    },
+
     requestDeleteConfirmation(id) {
       this.confirmDeletePost = id
     },
@@ -210,6 +227,14 @@ export default {
       });
     },
 
+    // validateUserDelete(owner, user){
+    //    if (owner == user) {
+    //      return true;
+    //    } else {
+    //      return false;
+    //    }
+    // },
+
     getAllComments() {
       return this.comments;
     },
@@ -232,7 +257,6 @@ export default {
     if (authService.isAuthenticated()) {
       this.auth.user = authService.getUserData();
     }
-
     this.loadComments();
     this.loadPosts();
   },
@@ -240,6 +264,30 @@ export default {
 </script>
 
 <style>
+.comment-text{
+  margin: 0;
+  padding: 0;
+  
+}
+
+.card-comments {
+  padding: 0 !important;
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 7px;
+}
+
+.accordion-container{
+      width: 80%;
+    margin: auto;
+}
+
+.commentOwner {
+  margin-bottom: 0;
+}
+
+.commentDate {
+  font-size: 10px;
+}
 
 #errors-comment-content{
   width: 80%;

@@ -44,19 +44,22 @@ class TokenService {
         $config = $this->configToken();
         $token = $config->parser()->parse($tokenString);
         
-        try {
-            $constraint = [
-                new SignedWith($config->signer(), $config->signingKey()),
-                new IssuedBy('https://gonetwork.com')
-            ];
+        $constraint = [
+            new SignedWith($config->signer(), $config->signingKey()),
+            new IssuedBy('https://gonetwork.com')
+        ];
         
-            $config->validator()->assert($token, ...$constraint);
+        $config->validator()->assert($token, ...$constraint);
 
+        if($token->claims()->get('id')){
             return [
                 'id' => $token->claims()->get('id')
             ];
-        } catch (\Exception $e) {
-            return false;
+        } else {
+            return [
+                'error' => 'El token es inválido'
+            ];
         }
+
     }
 }

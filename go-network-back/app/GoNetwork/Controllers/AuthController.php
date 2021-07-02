@@ -24,7 +24,12 @@ class AuthController {
 
         $auth = new Auth;
 
-        $auth->login($email, $password);
+        if(!$auth->login($email, $password)){
+            echo json_encode([
+                'success' => false,
+                'data' => 'Usuario Inexistente'
+            ]);
+        }
     }
 
     public function logout(){
