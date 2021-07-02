@@ -4,7 +4,7 @@
 
     <div v-if="posts.length > 0">
     <div class="container" v-for="post in posts" :key="post.id">
-      <input type="hidden" name="" value="{{post.id}}" />
+      <input type="hidden" name="id" value="{{post.id}}" />
 
       <div class="blog-container">
         <div class="blog-header">
@@ -31,9 +31,11 @@
           </div>
           <div class="blog-tags">
             <ul>
-              <p class="category-name">
-                {{ post.category_id.name }}
-              </p>
+              <li>
+                <p class="category-name">
+                  {{ post.category_id.name }}
+                </p>
+              </li>
             </ul>
           </div>
         </div>
@@ -42,16 +44,16 @@
           <ul>
             <li class="published-date">{{ post.created_At }}</li>
 
-            <li class="comments accordion" id="accordionExample">
+            <li class="comments accordion" :id="`accordionExample${post.id}`">
               <a
                 href="#"
                 data-toggle="collapse"
                 :data-target="`#collapseOne${post.id}`"
                 aria-expanded="true"
-                aria-controls="collapseOne"
+                :aria-controls="`collapseOne${post.id}`"
                 @click="loadComments(post.id)"
               >
-                <i class="far fa-2x fa-comments colorMain" id="headingOne"></i>
+                <i class="far fa-2x fa-comments colorMain" :id="`headingOne${post.id}`"></i>
               </a>
             </li>
 
@@ -105,19 +107,19 @@
         </form>
 
         <!-- Comentarios -->
-        <div class="accordion pb-3" id="accordionExample">
+        <div class="accordion pb-3" :id="`accordionExample${post.id}`">
           <div
             :id="`collapseOne${post.id}`"
             class="collapse accordion-container"
-            aria-labelledby="headingOne"
-            data-parent="#accordionExample"
+            :aria-labelledby="`headingOne${post.id}`"
+            :data-parent="`#accordionExample${post.id}`"
           >
             <div
               class="card-body card-comments"
               v-for="comment in comments"
               :key="comment.id"
             >
-              
+
               <p class="commentOwner colorMain">{{comment.owner_id.name}} {{comment.owner_id.last_name}} <span class="commentDate">{{comment.created_at}}</span></p>
               <div class="d-flex justify-content-between">
                 <p class="mainGrey ml-2 comment-text">{{comment.comment}}</p>
@@ -247,6 +249,7 @@ export default {
     },
 
     loadComments(id) {
+      this.comments = [];
       apiFetch(`comments/${id}`).then((res) => {
         this.comments = res;
       });
@@ -349,7 +352,6 @@ export default {
 .blog-container {
   background: #fff;
   border-radius: 5px;
-  box-shadow: hsla(0, 0, 0, 0.2) 0 4px 2px -2px;
   font-family: "adelle-sans", sans-serif;
   font-weight: 100;
   margin: 5vh auto;
@@ -367,7 +369,6 @@ export default {
   background-size: cover;
   border-radius: 5px 5px 0 0;
   height: 500px;
-  box-shadow: inset hsla(0, 0, 0, 0.2) 0 64px 64px 16px;
 }
 
 .blog-author,
@@ -395,7 +396,6 @@ export default {
   text-shadow: white 2px 2px 3px;
 }
 .blog-author--no-cover h3 {
-  color: lighten(#333, 40%);
   font-weight: 100;
 }
 
@@ -412,7 +412,6 @@ export default {
   font-weight: 100;
 }
 .blog-summary p {
-  color: lighten(#333, 10%);
 }
 .blog-tags ul {
   display: flex;
@@ -425,9 +424,7 @@ export default {
   margin-left: 0.5rem;
 }
 .blog-tags a {
-  border: 1px solid lighten(#333, 40%);
   border-radius: 3px;
-  color: lighten(#333, 40%);
   font-size: 0.75rem;
   height: 1.5rem;
   line-height: 1.5rem;
@@ -440,7 +437,6 @@ export default {
 }
 
 .blog-footer {
-  border-top: 1px solid lighten(#333, 70%);
   margin: 0 auto;
   padding-bottom: 0.125rem;
   width: 80%;
@@ -448,7 +444,6 @@ export default {
 .blog-footer ul {
   list-style: none;
   display: flex;
-  flex: row wrap;
   justify-content: flex-end;
   padding-left: 0;
 }
@@ -459,7 +454,6 @@ export default {
   margin-left: 0.5rem;
 }
 .blog-footer li {
-  color: lighten(#333, 40%);
   font-size: 0.75rem;
   height: 1.5rem;
   letter-spacing: 1px;
@@ -476,7 +470,6 @@ export default {
   margin-right: 1rem;
 }
 .published-date {
-  border: 1px solid lighten(#333, 40%);
   border-radius: 3px;
   padding: 0 0.5rem;
 }
