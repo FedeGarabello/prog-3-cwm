@@ -216,6 +216,8 @@ export default {
             owner_id: null,
             content: null,
           };
+          let accordionContainer = document.querySelector('.accordion-container');
+          accordionContainer.className = 'accordion-container collapse';
         }
       });
       this.getAllComments();
@@ -226,14 +228,6 @@ export default {
         this.comments = res;
       });
     },
-
-    // validateUserDelete(owner, user){
-    //    if (owner == user) {
-    //      return true;
-    //    } else {
-    //      return false;
-    //    }
-    // },
 
     getAllComments() {
       return this.comments;
