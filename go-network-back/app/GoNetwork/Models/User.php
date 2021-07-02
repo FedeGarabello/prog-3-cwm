@@ -253,6 +253,7 @@ class User implements \JsonSerializable {
 
     public function createUser($data) {
 
+        $hashPA = password_hash($data['password'], PASSWORD_DEFAULT);
         $db = DBConnection::getConnection();
 
         $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`) 
@@ -264,7 +265,7 @@ class User implements \JsonSerializable {
             "name"          => $data['name'],
             "last_name"     => $data['last_name'],
             "email"         => $data['email'],
-            "password"      => $data['password'],
+            "password"      => $hashPA,
             "gender_id"     => $data['gender_id'],
             "birth_date"    => '1986-09-20'
         ])){

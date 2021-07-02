@@ -62,7 +62,8 @@
 
 
          <h4 class="mainGrey font-weight-bold mt-5">Tus posts:</h4>
-         <div class="container mt-5">
+         <div class="container mt-5"
+         v-if="posts.length > 0">
            <div class="row">
              <div class="col-4 postContainer text-center" v-for="post in posts" :key="post.id">
                <div class="container" >
@@ -72,6 +73,8 @@
              </div>
            </div>
          </div>
+         <p v-else> Aún no has creado POST</p>
+
       </div>
 
 

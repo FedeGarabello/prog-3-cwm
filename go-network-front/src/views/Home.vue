@@ -216,9 +216,9 @@ export default {
             owner_id: null,
             content: null,
           };
-          this.getAllComments();
         }
       });
+      this.getAllComments();
     },
 
     loadComments(id) {
