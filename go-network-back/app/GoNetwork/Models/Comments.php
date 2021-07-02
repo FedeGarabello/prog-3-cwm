@@ -142,6 +142,7 @@ class Comments implements \JsonSerializable{
             $categories = new stdClass();
             $categories->name = $row['name'];
             $categories->last_name = $row['last_name'];
+            $categories->owner_id = $row['owner_id'];
 
             $post = new self();
             $post->setId($row['id']);
@@ -183,6 +184,32 @@ class Comments implements \JsonSerializable{
         return [
             'success' => true,
             'msg' => 'Post creado con éxito'
+        ];
+    }
+
+    public function deleteComment($id) {
+        $auth = new Auth();
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
+        }
+
+        $db = DBConnection::getConnection();
+        $query = 'DELETE FROM comment WHERE id = ?';
+
+        $stmt = $db->prepare($query);
+
+        if(!$stmt->execute([$id])){
+            return [
+                'success' => false,
+                'msg' => 'Error al borrar el comentario'
+            ];
+        };
+
+        return [
+            'success' => true,
+            'msg' => 'Comentario borrado con éxito'
         ];
     }
 }

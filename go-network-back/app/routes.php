@@ -13,6 +13,7 @@ Route::add('GET','/categories','PostsController@getCategories');
 
 Route::add('GET','/comments/{id}','CommentsController@getCommentsByPost');
 Route::add('POST','/createComment','CommentsController@createComment');
+Route::add('GET','/deleteComment/{id}','CommentsController@deleteComment');
 
 Route::add('POST','/login','AuthController@login');
 Route::add('POST','/logout','AuthController@logout');

@@ -16,6 +16,10 @@
               <p class="login-card-description">Bienvenido, bro.</p>
               <p class="login-card-subtitle">Administrá el sitio acá</p>
 
+            <div v-if="errorLogin">
+                <p class="loginError colorDanger">Los datos ingresados no son válidos. Si no tenes cuenta, podes registrate.</p>
+            </div>
+
               <form action="#" 
                 @submit.prevent="login"
               >
@@ -44,8 +48,11 @@
                   <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Login">
                   <router-link class="btn btn-block login-btn mb-4" to="/register">Registrarse</router-link>
                 </form>
+
+
+
                 <a href="#!" class="forgot-password-link">Olvidaste tu contraseña?</a>
-                <p class="login-card-footer-text colorMain">Si no tenes credenciales comunicate con el  <a href="#!" class="text-reset">Administrador</a></p>
+                <p class="login-card-footer-text colorMain">Si no tenes credenciales Dale click a "Registrate"</p>
                 <nav class="login-card-footer-nav">
                   <a href="#!">Somos Go Snow</a>
                 </nav>
@@ -65,6 +72,7 @@ export default {
         emits: ['logged'],
     data() {
         return {
+            errorLogin: null,
             user: {
                 email: null,
                 password: null
@@ -83,10 +91,13 @@ export default {
                 .login(this.user.email, this.user.password)
                 .then(response => {
                     this.loading = false;
-                    if(response.success) {
+                    if(response.error) {
+                        this.errorLogin = true;
+                    }else{                            
                         this.$emit('logged', response.data);
                         this.$router.push('/')
                     }
+                    
                 });
         }
     }
@@ -100,6 +111,11 @@ $color-main: #3386AF;
 $color-main-darker: #225772;
 $main-grey: #353535;
 $orelga: 'Orelega One', cursive;
+
+.loginError {
+    font-size: 14.3px;
+    width: 60%;
+}
 
 .brand-wrapper{
     margin-bottom: 19px;

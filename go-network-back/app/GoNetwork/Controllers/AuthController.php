@@ -26,7 +26,7 @@ class AuthController {
 
         if(!$auth->login($email, $password)){
             echo json_encode([
-                'success' => false,
+                'error' => true,
                 'data' => 'Usuario Inexistente'
             ]);
         }

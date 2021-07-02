@@ -116,8 +116,14 @@
               v-for="comment in comments"
               :key="comment.id"
             >
+              
               <p class="commentOwner colorMain">{{comment.owner_id.name}} {{comment.owner_id.last_name}} <span class="commentDate">{{comment.created_at}}</span></p>
-              <p class="mainGrey ml-2 comment-text">{{ comment.comment }}</p>
+              <div class="d-flex justify-content-between">
+                <p class="mainGrey ml-2 comment-text">{{comment.comment}}</p>
+                <div v-if="comment.owner_id.owner_id == auth.user.id">
+                  <i class="fas fa-times deleteComment colorDanger" @click="deleteComment(comment.id)"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -223,6 +229,15 @@ export default {
       this.getAllComments();
     },
 
+    deleteComment(id) {
+      apiFetch(`deleteComment/${id}`)
+      .then((res) => {
+        if(res.success){
+          this.comments = this.comments.slice().filter(comment => comment.id !== id)
+        }
+      });
+    },
+
     loadComments(id) {
       apiFetch(`comments/${id}`).then((res) => {
         this.comments = res;
@@ -268,6 +283,7 @@ export default {
   padding: 0 !important;
   border-bottom: 1px solid lightgray;
   margin-bottom: 7px;
+  position: relative;
 }
 
 .accordion-container{

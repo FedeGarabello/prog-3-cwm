@@ -24,4 +24,11 @@ class CommentsController
         $posts = (new Comments())->createComment($postData);
         View::renderJson($posts);
     }
+
+    public function deleteComment() {
+        
+        $id = Route::getUrlParameters()['id'];
+        $posts = (new Comments())->deleteComment($id);
+        View::renderJson($posts);
+    }
 }
