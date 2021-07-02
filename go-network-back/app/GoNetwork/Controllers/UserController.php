@@ -24,4 +24,12 @@ class UserController
         $user = (new User())->createUser($postData);
         View::renderJson($user);
     }
+
+    public function editUser() {
+        $inputData = file_get_contents('php://input');
+        $postData = json_decode($inputData, true);
+
+        $user = (new User())->editUser($postData);
+        View::renderJson($user);
+    }
 }

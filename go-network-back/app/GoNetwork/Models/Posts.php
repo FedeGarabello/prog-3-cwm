@@ -9,6 +9,7 @@ use GoNetwork\DBConnection\DBConnection;
 use PDO;
 use stdClass;
 use GoNetwork\Auth\Auth;
+use GoNetwork\Auth\TokenService;
 
 class Posts implements \JsonSerializable {
 
@@ -24,7 +25,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -34,7 +35,7 @@ class Posts implements \JsonSerializable {
      * Set the value of id
      *
      * @return  self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -44,7 +45,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of title
-     */ 
+     */
     public function getTitle()
     {
         return $this->title;
@@ -54,7 +55,7 @@ class Posts implements \JsonSerializable {
      * Set the value of title
      *
      * @return  self
-     */ 
+     */
     public function setTitle($title)
     {
         $this->title = $title;
@@ -64,7 +65,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of content
-     */ 
+     */
     public function getContent()
     {
         return $this->content;
@@ -74,7 +75,7 @@ class Posts implements \JsonSerializable {
      * Set the value of content
      *
      * @return  self
-     */ 
+     */
     public function setContent($content)
     {
         $this->content = $content;
@@ -84,7 +85,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of post_pic
-     */ 
+     */
     public function getPostPic()
     {
         return $this->post_pic;
@@ -94,7 +95,7 @@ class Posts implements \JsonSerializable {
      * Set the value of post_pic
      *
      * @return  self
-     */ 
+     */
     public function setPostPic($post_pic)
     {
         $this->post_pic = $post_pic;
@@ -104,7 +105,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of owner_id
-     */ 
+     */
     public function getOwnerId()
     {
         return $this->owner_id;
@@ -114,7 +115,7 @@ class Posts implements \JsonSerializable {
      * Set the value of owner_id
      *
      * @return  self
-     */ 
+     */
     public function setOwnerId($owner_id)
     {
         $this->owner_id = $owner_id;
@@ -124,7 +125,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of likes
-     */ 
+     */
     public function getLikes()
     {
         return $this->likes;
@@ -134,7 +135,7 @@ class Posts implements \JsonSerializable {
      * Set the value of likes
      *
      * @return  self
-     */ 
+     */
     public function setLikes($likes)
     {
         $this->likes = $likes;
@@ -144,7 +145,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of category_id
-     */ 
+     */
     public function getCategoryId()
     {
         return $this->category_id;
@@ -154,7 +155,7 @@ class Posts implements \JsonSerializable {
      * Set the value of category_id
      *
      * @return  self
-     */ 
+     */
     public function setCategoryId($category_id)
     {
         $this->category_id = $category_id;
@@ -164,7 +165,7 @@ class Posts implements \JsonSerializable {
 
     /**
      * Get the value of created_at
-     */ 
+     */
     public function getCreatedAt()
     {
         return $this->created_at;
@@ -174,7 +175,7 @@ class Posts implements \JsonSerializable {
      * Set the value of created_at
      *
      * @return  self
-     */ 
+     */
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
@@ -197,7 +198,6 @@ class Posts implements \JsonSerializable {
             'owner_id'      => $this->getOwnerId(),
             'user_name'     => trim($this->getUserByOwerId()->getName()),
             'last_name'     => trim($this->getUserByOwerId()->getLastName()),
-            'profile_pic'   => $this->getUserByOwerId()->getProfilePic(),
             'likes'         => $this->getLikes(),
             'category_id'   => $this->getCategoryId(),
             'created_At'    => $this->getCreatedAt(),
@@ -219,7 +219,7 @@ class Posts implements \JsonSerializable {
                 order by created_at desc';
         $stmt = $db->prepare($query);
         $stmt->execute();
-        
+
         $output = [];
 
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -239,7 +239,7 @@ class Posts implements \JsonSerializable {
 
             $output[] = $post;
         }
-        time_nanosleep(0, 300000000);
+        sleep(1.2);
         return $output;
     }
 
@@ -252,7 +252,8 @@ class Posts implements \JsonSerializable {
     public function getAllPostByUser($owner_id) {
         $db = DBConnection::getConnection();
         $query = 'SELECT * from post
-                    WHERE owner_id = ?';
+                    WHERE owner_id = ? 
+                    AND is_active = 1';
         $stmt = $db->prepare($query);
         $stmt->execute([$owner_id]);
 
@@ -281,7 +282,6 @@ class Posts implements \JsonSerializable {
      * @return array
      */
     public function getPostById($id) {
-
         $db = DBConnection::getConnection();
         $query = 'SELECT * from post
                     WHERE id = ?';
@@ -308,10 +308,15 @@ class Posts implements \JsonSerializable {
     public function editPostById($data) {
 
         $auth = new Auth();
-        if(!$auth->validateTokenForUser()){
-            return [
-                'msg' => 'No hemos podido validar al usuario'
-            ];
+        $tokenCookie = $auth->getUserToken();
+
+
+        $validateToken = new TokenService();
+        $validateToken->validateToken($tokenCookie);
+
+
+        if (!$validateToken){
+            return false;
         }
 
 
@@ -350,12 +355,6 @@ class Posts implements \JsonSerializable {
      * @return array
      */
     public function createPost($data) {
-        $auth = new Auth();
-        if(!$auth->validateTokenForUser()){
-            return [
-                'msg' => 'No hemos podido validar al usuario'
-            ];
-        }
 
         if ($data['post_pic'] === null) {
             $data['post_pic'] = "post_pic.jpg";
@@ -363,15 +362,14 @@ class Posts implements \JsonSerializable {
 
         $db = DBConnection::getConnection();
         $query = 'INSERT INTO post (title, content, owner_id, likes, category_id, post_pic)
-                    VALUES (:title, :content, :owner_id, 0, :category_id, :post_pic)';
+                    VALUES (:title, :content, 1, 0, :category_id, :post_pic)';
         $stmt = $db->prepare($query);
 
         if(!$stmt->execute([
-            "owner_id"      => $data['owner_id'],
-            "title"         => $data['title'],
-            "content"       => $data['content'],
-            "category_id"   => $data['category_id'],
-            "post_pic"      => $data['post_pic']
+            "title" => $data['title'],
+            "content" => $data['content'],
+            "category_id" => $data['category_id'],
+            "post_pic" => $data['post_pic']
         ])){
             return [
                 'success' => false,
@@ -386,13 +384,6 @@ class Posts implements \JsonSerializable {
     }
 
     public function deletePost($post_id){
-        $auth = new Auth();
-        if(!$auth->validateTokenForUser()){
-            return [
-                'msg' => 'No hemos podido validar al usuario'
-            ];
-        }
-
         $db = DBConnection::getConnection();
         $query = 'UPDATE post SET is_active = 0
                     where id = ?';

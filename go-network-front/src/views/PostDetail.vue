@@ -54,7 +54,7 @@
               alt="Imagen de Portada">
 
         </div>
-        <button type="submit" class="btn btn-logout btn-create">Editar</button>
+        <button type="submit" class="btn btn-block login-btn mt-4 ">Editar</button>
       </form>
 
 

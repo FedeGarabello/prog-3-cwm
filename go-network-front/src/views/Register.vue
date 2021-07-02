@@ -8,7 +8,6 @@
     <form action="#"
           @submit.prevent="register">
 
-      <ProfilePic />
       <div class="form-group">
         <label for="name" class="sr-only">Nombre</label>
         <input
@@ -65,29 +64,7 @@
             placeholder="Ingresá tu Género"
         >
       </div>
-      <div class="form-group">
-        <label for="country_id" class="sr-only">País</label>
-        <input
-            type="text"
-            name="country_id"
-            id="country_id"
-            class="form-control"
-            v-model="user.country_id"
-            placeholder="Ingresá tu País"
-        >
-      </div>
-      <div class="form-group">
-        <label for="country_id" class="sr-only">Imágen</label>
-        <input
-            type="file"
-            name="profile_pic"
-            id="profile_pic"
-            class="form-control"
-            @change="loadProfilePic"
-            placeholder="Ingresá tu Imágen de Perfil"
-        >
-      </div>
-      <ProfilePicture></ProfilePicture>
+
       <input name="newUser" id="newUser" class="btn btn-block login-btn mb-4" type="submit" value="Registrarse">
 
     </form>
@@ -97,13 +74,10 @@
 
 <script>
 import { apiFetch } from "@/api/fetch";
-import ProfilePicture from "@/components/ProfilePic.vue";
 
 export default {
   name: 'Register',
-  components: {
-    ProfilePicture
-  },
+
   data() {
     return {
       user: {
@@ -113,7 +87,6 @@ export default {
         password: null,
         gender_id: null,
         birth_date: null,
-        country_id: null,
         profile_pic: null
       },
       loading: false,
@@ -124,9 +97,6 @@ export default {
     };
   },
   methods: {
-    loadProfilePic() {
-      // TODO Cargar imagen
-    },
     register() {
       this.loading = true;
 
@@ -146,7 +116,6 @@ export default {
               password: null,
               gender_id: null,
               birth_date: null,
-              country_id: null,
               profile_pic: null
             };
 

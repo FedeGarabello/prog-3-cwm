@@ -14,8 +14,6 @@ class User implements \JsonSerializable {
     private $password;
     private $gender_id;
     private $birth_date;
-    private $country_id;
-    private $profile_pic;
     private $created_at;
 
     /**
@@ -159,46 +157,6 @@ class User implements \JsonSerializable {
     }
 
     /**
-     * Get the value of country_id
-     */ 
-    public function getCountryId()
-    {
-        return $this->country_id;
-    }
-
-    /**
-     * Set the value of country_id
-     *
-     * @return  self
-     */ 
-    public function setCountryId($country_id)
-    {
-        $this->country_id = $country_id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of profile_pic
-     */ 
-    public function getProfilePic()
-    {
-        return $this->profile_pic;
-    }
-
-    /**
-     * Set the value of profile_pic
-     *
-     * @return  self
-     */ 
-    public function setProfilePic($profile_pic)
-    {
-        $this->profile_pic = $profile_pic;
-
-        return $this;
-    }
-
-    /**
      * Get the value of created_at
      */ 
     public function getCreatedAt()
@@ -227,8 +185,6 @@ class User implements \JsonSerializable {
             'password'      => $this->getPassword(),
             'gender_id'     => $this->getGenderId(),
             'birth_date'    => $this->getBirthDate(),
-            'country_id'    => $this->getCountryId(),
-            'profile_pic'   => $this->getProfilePic(),
             'created_at'    => $this->getCreatedAt()
         ];
     }
@@ -254,8 +210,6 @@ class User implements \JsonSerializable {
         $user->setPassword($row['password']);
         $user->setGenderId($row['gender_id']);
         $user->setBirthDate($row['birth_date']);
-        $user->setCountryId($row['country_id']);
-        $user->setProfilePic($row['profile_pic']);
         $user->setCreatedAt($row['created_at']);
 
         return $user;
@@ -289,8 +243,6 @@ class User implements \JsonSerializable {
             $user->setPassword($row['password']);
             $user->setGenderId($row['gender_id']);
             $user->setBirthDate($row['birth_date']);
-            $user->setCountryId($row['country_id']);
-            $user->setProfilePic($row['profile_pic']);
             $user->setCreatedAt($row['created_at']);
 
             $output = $user;
@@ -303,8 +255,8 @@ class User implements \JsonSerializable {
 
         $db = DBConnection::getConnection();
 
-        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`, `country_id`, `profile_pic`) 
-                VALUES (:name, :last_name, :email, :password, :gender_id, :birth_date, :country_id, :profile_pic)";
+        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`) 
+                VALUES (:name, :last_name, :email, :password, :gender_id, :birth_date)";
 
         $stmt = $db->prepare($query);
 
@@ -314,19 +266,51 @@ class User implements \JsonSerializable {
             "email"         => $data['email'],
             "password"      => $data['password'],
             "gender_id"     => $data['gender_id'],
-            "birth_date"    => '1986-09-20',
-            "country_id"    => $data['country_id'],
-            "profile_pic"   => "profile.jpg"
+            "birth_date"    => '1986-09-20'
         ])){
             return [
                 'success' => false,
-                'msg' => 'Error al crear al usuario'
+                'msg' => 'Error al crear el usuario'
             ];
         };
 
         return [
             'success' => true,
-            'msg' => 'El usuario fue creado con exito'
+            'msg' => 'El usuario fue creado con éxito'
+        ];
+    }
+
+
+    public function editUser($data) {
+
+
+
+        $db = DBConnection::getConnection();
+
+        $query = "UPDATE `goNetwork`.`user` 
+                    SET `name` = :name, `last_name` = :last_name, `email` = :email, 
+                        `gender_id` = :gender_id, `birth_date` = :birth_date 
+                    WHERE (`id` = :id);";
+
+        $stmt = $db->prepare($query);
+
+        if(!$stmt->execute([
+            "id"            => $data['id'],
+            "name"          => $data['name'],
+            "last_name"     => $data['last_name'],
+            "email"         => $data['email'],
+            "birth_date"    => '1986-09-20',
+            "gender_id"     => $data['gender_id']
+        ])){
+            return [
+                'success' => false,
+                'msg' => 'Error al editar el usuario'
+            ];
+        };
+
+        return [
+            'success' => true,
+            'msg' => 'El usuario fue editado con éxito'
         ];
     }
 

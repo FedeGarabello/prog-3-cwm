@@ -19,3 +19,4 @@ Route::add('POST','/logout','AuthController@logout');
 
 Route::add('GET','/user/{id}','UserController@getUser');
 Route::add('POST','/register','UserController@createUser');
+Route::add('POST','/editProfile','UserController@editUser');

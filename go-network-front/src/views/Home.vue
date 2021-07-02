@@ -11,7 +11,7 @@
             class="blog-cover"
             :style="`background:url(${imageURL(
               post.post_pic
-            )}); background-size: cover;`"
+            )}); background-size: cover;  background-position: center;`"
           >
             <div class="blog-author">
               <h3>{{ post.user_name }} {{ post.last_name }}</h3>
@@ -314,7 +314,6 @@ export default {
 
 .blog-author h3::before,
 .blog-author--no-cover h3::before {
-  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/17779/russ.jpeg");
   background-size: cover;
   border-radius: 50%;
   content: " ";
