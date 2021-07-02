@@ -356,20 +356,28 @@ class Posts implements \JsonSerializable {
      */
     public function createPost($data) {
 
+        $auth = new Auth();
+        if(!$auth->validateTokenForUser()){
+            return [
+                'msg' => 'No hemos podido validar al usuario'
+            ];
+        }
+        
         if ($data['post_pic'] === null) {
             $data['post_pic'] = "post_pic.jpg";
         }
 
         $db = DBConnection::getConnection();
         $query = 'INSERT INTO post (title, content, owner_id, likes, category_id, post_pic)
-                    VALUES (:title, :content, 1, 0, :category_id, :post_pic)';
+                    VALUES (:title, :content, :owner_id, 0, :category_id, :post_pic)';
         $stmt = $db->prepare($query);
 
         if(!$stmt->execute([
-            "title" => $data['title'],
-            "content" => $data['content'],
-            "category_id" => $data['category_id'],
-            "post_pic" => $data['post_pic']
+            "title"         => $data['title'],
+            "content"       => $data['content'],
+            "category_id"   => $data['category_id'],
+            "post_pic"      => $data['post_pic'],
+            "owner_id"      => $data['owner_id']
         ])){
             return [
                 'success' => false,

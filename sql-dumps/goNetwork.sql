@@ -98,7 +98,6 @@ CREATE TABLE `user` (
   `email` varchar(200) NOT NULL,
   `password` varchar(255) NOT NULL,
   `gender_id` int(11) DEFAULT NULL,
-  `birth_date` date DEFAULT NULL,
   `country_id` int(11) NOT NULL,
   `profile_pic` varchar(200) DEFAULT 'profile.jpg',
   `created_at` datetime NOT NULL DEFAULT current_timestamp()

@@ -13,7 +13,6 @@ class User implements \JsonSerializable {
     private $email;
     private $password;
     private $gender_id;
-    private $birth_date;
     private $created_at;
 
     /**
@@ -137,26 +136,6 @@ class User implements \JsonSerializable {
     }
 
     /**
-     * Get the value of birth_date
-     */ 
-    public function getBirthDate()
-    {
-        return $this->birth_date;
-    }
-
-    /**
-     * Set the value of birth_date
-     *
-     * @return  self
-     */ 
-    public function setBirthDate($birth_date)
-    {
-        $this->birth_date = $birth_date;
-
-        return $this;
-    }
-
-    /**
      * Get the value of created_at
      */ 
     public function getCreatedAt()
@@ -184,7 +163,6 @@ class User implements \JsonSerializable {
             'email'         => $this->getEmail(),
             'password'      => $this->getPassword(),
             'gender_id'     => $this->getGenderId(),
-            'birth_date'    => $this->getBirthDate(),
             'created_at'    => $this->getCreatedAt()
         ];
     }
@@ -209,7 +187,6 @@ class User implements \JsonSerializable {
         $user->setEmail($row['email']);
         $user->setPassword($row['password']);
         $user->setGenderId($row['gender_id']);
-        $user->setBirthDate($row['birth_date']);
         $user->setCreatedAt($row['created_at']);
 
         return $user;
@@ -242,7 +219,6 @@ class User implements \JsonSerializable {
             $user->setEmail($row['email']);
             $user->setPassword($row['password']);
             $user->setGenderId($row['gender_id']);
-            $user->setBirthDate($row['birth_date']);
             $user->setCreatedAt($row['created_at']);
 
             $output = $user;
@@ -256,8 +232,8 @@ class User implements \JsonSerializable {
         $hashPA = password_hash($data['password'], PASSWORD_DEFAULT);
         $db = DBConnection::getConnection();
 
-        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`, `birth_date`) 
-                VALUES (:name, :last_name, :email, :password, :gender_id, :birth_date)";
+        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`) 
+                VALUES (:name, :last_name, :email, :password, :gender_id)";
 
         $stmt = $db->prepare($query);
 
@@ -266,8 +242,7 @@ class User implements \JsonSerializable {
             "last_name"     => $data['last_name'],
             "email"         => $data['email'],
             "password"      => $hashPA,
-            "gender_id"     => $data['gender_id'],
-            "birth_date"    => '1986-09-20'
+            "gender_id"     => $data['gender_id']
         ])){
             return [
                 'success' => false,
@@ -290,7 +265,7 @@ class User implements \JsonSerializable {
 
         $query = "UPDATE `goNetwork`.`user` 
                     SET `name` = :name, `last_name` = :last_name, `email` = :email, 
-                        `gender_id` = :gender_id, `birth_date` = :birth_date 
+                        `gender_id` = :gender_id 
                     WHERE (`id` = :id);";
 
         $stmt = $db->prepare($query);
@@ -300,7 +275,6 @@ class User implements \JsonSerializable {
             "name"          => $data['name'],
             "last_name"     => $data['last_name'],
             "email"         => $data['email'],
-            "birth_date"    => '1986-09-20',
             "gender_id"     => $data['gender_id']
         ])){
             return [
