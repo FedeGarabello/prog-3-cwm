@@ -7,8 +7,10 @@ class Route
     protected static $routes = [
         'GET'       => [],
         'POST'      => [],
+        'PATCH'     => [],
         'PUT'       => [],
         'DELETE'    => [],
+        'OPTIONS'   => [],
     ];
 
     /** @var string  */

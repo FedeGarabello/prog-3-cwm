@@ -32,4 +32,7 @@ class UserController
         $user = (new User())->editUser($postData);
         View::renderJson($user);
     }
+    public function empty() {
+
+    }
 }

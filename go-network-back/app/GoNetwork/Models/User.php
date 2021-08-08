@@ -167,6 +167,20 @@ class User implements \JsonSerializable {
         ];
     }
 
+    public function getUser($row)
+    {
+        $user = new self();
+        $user->setId($row['id']);
+        $user->setName($row['name']);
+        $user->setLastName($row['last_name']);
+        $user->setEmail($row['email']);
+        $user->setGenderId($row['gender_id']);
+        $user->setCreatedAt($row['created_at']);
+
+        return $user;
+    }
+
+
     public function getUserById($id)
     {
         $db = DBConnection::getConnection();

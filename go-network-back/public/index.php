@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/../autoload.php';
+require_once __DIR__ . '/../app/Helpers/routes.php';
 
 $rootPath = realpath(__DIR__ . '/../');
 
