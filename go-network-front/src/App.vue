@@ -12,6 +12,15 @@
               <router-link class="nav-link" to="/profile">Mi Perfil</router-link>
           </li>
 
+        <li class="nav-item mt-1">
+            <router-link class="nav-link" to="/friends">Mis Contactos</router-link>
+        </li>
+
+
+        <li class="nav-item mt-1">
+            <router-link class="nav-link" to="/search">Buscar Contactos</router-link>
+        </li>
+
         </ul>
         <form 
             class="form-inline my-2 my-lg-0"

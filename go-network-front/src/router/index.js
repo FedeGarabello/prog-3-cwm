@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import ViewProfile from '../views/ViewProfile.vue'
+import ViewFriends from '../views/ViewFriends.vue'
+import SearchFriends from '../views/SearchFriends.vue'
 import NewPost from '../views/NewPost.vue'
 import Login from '../views/Login.vue'
 import PostDetail from '../views/PostDetail.vue'
@@ -20,6 +22,22 @@ const routes = [
     path: '/profile',
     name: 'ViewProfile',
     component: ViewProfile,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/friends',
+    name: 'ViewFriends',
+    component: ViewFriends,
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/search',
+    name: 'SearchFriends',
+    component: SearchFriends,
     meta: {
       requiresAuth: true,
     }
