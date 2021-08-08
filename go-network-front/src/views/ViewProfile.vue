@@ -115,7 +115,8 @@ export default {
       return {
         imgPath: API_IMAGES,
         userData: [],
-        posts: [],
+        posts: [
+        ],
         notification: {
           msg: null,
           type: null,

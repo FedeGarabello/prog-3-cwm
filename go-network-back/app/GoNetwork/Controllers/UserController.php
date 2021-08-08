@@ -11,7 +11,6 @@ use GoNetwork\Models\User;
 class UserController
 {
     public function getUser() {
-
         $id = Route::getUrlParameters()['id'];
         $user = (new User())->getUserById($id);
         View::renderJson($user);
@@ -32,6 +31,12 @@ class UserController
         $user = (new User())->editUser($postData);
         View::renderJson($user);
     }
+
+    public function getAllUsers(){
+        $users = (new User())->getAllContacts();
+        View::renderJson($users);
+    }
+    
     public function empty() {
 
     }

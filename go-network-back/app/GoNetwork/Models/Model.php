@@ -67,7 +67,6 @@ class Model
         $stmt->setFetchMode(PDO::FETCH_CLASS, static::class);
 
         return $stmt->fetchAll();
-
     }
 
     /**

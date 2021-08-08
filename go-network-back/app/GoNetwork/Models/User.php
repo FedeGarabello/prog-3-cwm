@@ -5,7 +5,24 @@ require_once __DIR__ . '/../../../bootstrap/init.php';
 use GoNetwork\DBConnection\DBConnection;
 use PDO;
 
-class User implements \JsonSerializable {
+class User extends Model implements \JsonSerializable {
+
+    /** @var string La tabla con la que el Modelo se mapea. */
+    protected $table = 'user';
+
+    /** @var string El nombre del campo que es la PK. */
+    protected $primaryKey = 'id';
+    
+    /** @var array La lista de atributos/campos de la tabla que se mapean con las propiedades del Modelo. */
+    protected $attributes = [
+        'id',
+        'name',
+        'last_name',
+        'email',
+        'password',
+        'gender_id',
+        'created_at',
+    ];
     
     private $id;
     private $name;
@@ -246,7 +263,7 @@ class User implements \JsonSerializable {
         $hashPA = password_hash($data['password'], PASSWORD_DEFAULT);
         $db = DBConnection::getConnection();
 
-        $query = "INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `gender_id`) 
+        $query = "INSERT INTO 'user' ('name', 'last_name', 'email', 'password', 'gender_id') 
                 VALUES (:name, :last_name, :email, :password, :gender_id)";
 
         $stmt = $db->prepare($query);
@@ -272,15 +289,12 @@ class User implements \JsonSerializable {
 
 
     public function editUser($data) {
-
-
-
         $db = DBConnection::getConnection();
 
-        $query = "UPDATE `goNetwork`.`user` 
-                    SET `name` = :name, `last_name` = :last_name, `email` = :email, 
-                        `gender_id` = :gender_id 
-                    WHERE (`id` = :id);";
+        $query = "UPDATE 'goNetwork'.'user' 
+                    SET 'name' = :name, 'last_name' = :last_name, 'email' = :email, 
+                        'gender_id' = :gender_id 
+                    WHERE ('id' = :id);";
 
         $stmt = $db->prepare($query);
 
@@ -301,6 +315,29 @@ class User implements \JsonSerializable {
             'success' => true,
             'msg' => 'El usuario fue editado con éxito'
         ];
+    }
+
+    public function getAllContacts(){
+        $db = DBConnection::getConnection();
+        $query = 'SELECT * from user';
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+
+        $output = [];
+
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+            $user = new self();
+            $user->setId($row['id']);
+            $user->setName($row['name']);
+            $user->setLastName($row['last_name']);
+            $user->setEmail($row['email']);
+            $user->setGenderId($row['gender_id']);
+            $user->setCreatedAt($row['created_at']);
+
+            $output[] = $user;
+        }
+        return $output;
     }
 
     public function generatePassword($password){
