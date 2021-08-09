@@ -92,6 +92,33 @@ class Model
     }
 
     /**
+     * Retorna el registro asociado a la PK.
+     *
+     * @param mixed $id
+     * @return static|null
+     */
+    public function traerTodoPorPK($id)
+    {
+
+        $db = DBConnection::getConnection();
+        $query = "SELECT * FROM " . $this->table . "
+                WHERE " . $this->primaryKey . " = ?";
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->execute([$id]);
+            $exit = [];
+            while($row = $stmt->fetchObject(static::class)) {
+                $exit[] = $row;
+            }
+        } catch(PDOException $e) {
+            throw new QueryException($query, [$id], $stmt->errorInfo(), $e->getMessage(), $e->getCode(), $e->getPrevious());
+        }
+
+        return $exit;
+    }
+
+
+    /**
      * @param array $data
      * @return bool
      */

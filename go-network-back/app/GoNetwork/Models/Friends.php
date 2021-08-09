@@ -50,44 +50,15 @@ class Friends extends Model implements \JsonSerializable
      */
     public function getFriendsByPK($id)
     {
-        $db = DBConnection::getConnection();
+        $friends = (new self)->traerTodoPorPK($id);
 
-        // Para evitar multiples querys ya traigo los valores que luego cargo con la funcion getUser.
-        $query = "SELECT uhf.*, u.id, u.name, u.last_name, u.email, u.gender_id, u.birth_date, u.profile_pic, u.created_at
-                    FROM " . $this->table . " uhf
-                    JOIN USER u ON uhf.id_friend = u.id
-                    WHERE " . $this->primaryKey . " = ?";
-
-/*
-        $query = "SELECT *
-                    FROM " . $this->table . "
-                    WHERE " . $this->primaryKey . " = ?";
-*/
-        try {
-            $stmt = $db->prepare($query);
-            $stmt->execute([$id]);
-
-            $exit = [];
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $friend = (new User())->getUser($row);
-
-                $exit[] = $friend;
-                /*
-                $exit[] = [
-                    'user' => (new User())->getUserById($row['id_friend']),
-                    'state' => $row['state'],
-                    'created_at' => $row['created_at']
-                ];
-                */
-
-            }
-
-        } catch(PDOException $e) {
-            throw new QueryException($query, [$id], $stmt->errorInfo(), $e->getMessage(), $e->getCode(), $e->getPrevious());
+        $exit = [];
+        foreach ($friends as $f ){
+            $friend = (new User())->traerPorPK($f->getIdFriend());
+            $exit[]= $friend;
         }
-
         return $exit;
-        //return $stmt->fetchObject(static::class);
+
     }
 
 
