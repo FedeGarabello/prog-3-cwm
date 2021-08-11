@@ -317,11 +317,12 @@ class User extends Model implements \JsonSerializable {
         ];
     }
 
-    public function getAllContacts(){
+    public function getAllContacts($id){
         $db = DBConnection::getConnection();
-        $query = 'SELECT * from user';
+        $query = 'SELECT * FROM user u WHERE u.id in (SELECT uf.id_friend FROM user_has_friend uf where uf.id_user = :id and uf.`state` = 1) and u.id <> :id 
+        UNION ALL SELECT * FROM user u WHERE u.id not in (SELECT uf.id_friend FROM user_has_friend uf where uf.id_user = :id) and u.id <> :id;';
         $stmt = $db->prepare($query);
-        $stmt->execute();
+        $stmt->execute(['id' => $id]);
 
         $output = [];
 

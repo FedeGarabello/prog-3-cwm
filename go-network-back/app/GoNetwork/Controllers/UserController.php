@@ -33,7 +33,8 @@ class UserController
     }
 
     public function getAllUsers(){
-        $users = (new User())->getAllContacts();
+        $id = Route::getUrlParameters()['id'];
+        $users = (new User())->getAllContacts($id);
         View::renderJson($users);
     }
     

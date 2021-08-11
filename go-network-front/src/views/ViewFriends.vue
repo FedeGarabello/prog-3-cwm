@@ -2,10 +2,12 @@
     <main class="container">
         <h4 class="mainGrey font-weight-bold mt-5">Tus contactos:</h4>
 
-         <div class="container mt-4 d-flex"
+        <input type="text" v-model="search">
+
+         <div class="container mt-4 d-flex flex-wrap"
          v-if="friends.length > 0">
 
-           <div class="col-md-4 mt-4" v-for="friend in friends" :key="friend.id">
+           <div class="col-md-4 mt-4" v-for="friend in filterdFriend" :key="friend.id">
              <div class="card profile-card-5">
                <div class="card-img-block">
                  <img class="card-img-top" src="https://images.unsplash.com/photo-1517832207067-4db24a2ae47c" alt="Card image cap">
@@ -14,6 +16,7 @@
                  <h5 class="card-title">{{friend.name + ' ' + friend.last_name}}</h5>
                  <p class="card-text"><span class="font-weight-bold">Email:</span> {{friend.email}}</p>
                  <a href="#" class="btn btn-primary">Ver Post de este usuario</a>
+                 <span>Icono de +</span>
                </div>
              </div>
            </div>
@@ -34,11 +37,13 @@
 
 <script>
 import { apiFetch } from '../api/fetch'
+import { stripVowelAccent } from '../services/parser'
 
 export default {
 
     data: function () {
       return {
+        search: '',
         friends: [
         ],
       };
@@ -49,7 +54,20 @@ export default {
         let getUser = JSON.parse(localStorage.getItem('userData'));
         return getUser.id
       },
+
+
     },
+
+    computed: {
+      filterdFriend(){
+        return this.friends.filter(friend => stripVowelAccent(friend.name.toLowerCase()).match(stripVowelAccent(this.search.toLowerCase())) 
+               || stripVowelAccent(friend.last_name.toLowerCase()).match(stripVowelAccent(this.search.toLowerCase()))
+               || stripVowelAccent(friend.email.toLowerCase()).match(stripVowelAccent(this.search.toLowerCase())))
+               
+      }
+    },
+
+    
 
     mounted() {
         apiFetch('friends/' + this.getUser())

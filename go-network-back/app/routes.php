@@ -21,7 +21,7 @@ Route::add('POST','/logout','AuthController@logout');
 
 // PROFILE
 Route::add('GET','/user/{id}','UserController@getUser');
-Route::add('GET','/getAllUsers','UserController@getAllUsers');
+Route::add('GET','/getAllUsers/{id}','UserController@getAllUsers');
 
 // REGISTRO
 Route::add('POST','/register','UserController@createUser');
