@@ -72,7 +72,8 @@ export default {
     mounted() {
         apiFetch('friends/' + this.getUser())
             .then(res => {
-             this.friends = res;
+              console.log(res)
+             //this.friends = res;
         });
     },
 }

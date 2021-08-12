@@ -56,7 +56,8 @@ class Friends extends Model implements \JsonSerializable
         foreach ($friends as $f ){
             $friend = (new User())->traerPorPK($f->getIdFriend());
             $friend->setPassword('');
-            $exit[]= $friend;
+
+            array_push($exit, [$friend,$f]);
         }
         return $exit;
 
