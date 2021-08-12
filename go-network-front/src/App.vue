@@ -9,6 +9,11 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item mt-1">
+            <router-link class="nav-link" to="/">Inicio</router-link>
+          </li>
+
+
+          <li class="nav-item mt-1">
               <router-link class="nav-link" to="/profile">Mi Perfil</router-link>
           </li>
 
