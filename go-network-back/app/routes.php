@@ -32,4 +32,6 @@ Route::add('POST','/editProfile','UserController@editUser');
 Route::add('GET','/friends/{id}','FriendController@listFriends');
 Route::add('POST','/friends/{id}','FriendController@empty');
 
+// FAVORITOS
+Route::add('GET','/favorites/{id}','FavoritesController@getFavorites');
 

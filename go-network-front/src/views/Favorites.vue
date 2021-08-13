@@ -1,5 +1,9 @@
 <template>
+  <div class="container">
+    <h2>Favoritos</h2>
 
+    <p>Aca los favoritos</p>
+  </div>
 </template>
 
 <script>
