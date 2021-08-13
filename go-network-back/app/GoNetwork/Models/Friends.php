@@ -5,6 +5,7 @@ namespace GoNetwork\Models;
 use GoNetwork\DBConnection\DBConnection;
 use JsonSerializable;
 use PDO;
+use stdClass;
 
 //Agregar/quitar usuarios a un lista de amigos, para poder luego ver sus publicaciones de manera separada.
 // Esta clase transforma el id_friend en un objeto User.
@@ -52,14 +53,24 @@ class Friends extends Model implements \JsonSerializable
     {
         $friends = (new self)->traerTodoPorPK($id);
 
-        $exit = [];
+        $merged = new stdClass();
+        $exit = null;
+
         foreach ($friends as $f ){
             $friend = (new User())->traerPorPK($f->getIdFriend());
             $friend->setPassword('');
-            $exit[]= $friend;
+
+            $merged->id         = $friend->getId();
+            $merged->name       = $friend->getName();
+            $merged->last_name  = $friend->getLastName();
+            $merged->email      = $friend->getEmail();
+            $merged->id_user    = $f->getIdUser();
+            $merged->state      = $f->getState();
+            $merged->created_at = $f->getCreatedAt();
+            $exit[] = $merged;
+
         }
         return $exit;
-
     }
 
 
